@@ -28,14 +28,14 @@ export function AdminTopbar({ title }: { title: string }) {
         </DialogContent>
       </Dialog>
 
-      <h1 className="text-lg font-semibold text-foreground">{title}</h1>
+      <h1 className="font-display text-lg font-semibold text-foreground">{title}</h1>
 
       <div className="ml-auto flex items-center gap-2">
         <div className="relative hidden md:block">
           <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Search bookings, vendors..."
-            className="h-9 w-64 pl-9"
+            className="h-9 w-64 rounded-md pl-9"
             aria-label="Search"
           />
         </div>
@@ -44,8 +44,8 @@ export function AdminTopbar({ title }: { title: string }) {
           <Bell className="size-5" />
           <span className="absolute right-2 top-2 size-2 rounded-full bg-cta" />
         </Button>
-        <Avatar className="size-9">
-          <AvatarFallback className="bg-primary text-primary-foreground text-xs font-semibold">
+        <Avatar className="size-9 border-2 border-border/60">
+          <AvatarFallback className="bg-copper/10 font-display text-xs font-semibold text-copper">
             AD
           </AvatarFallback>
         </Avatar>

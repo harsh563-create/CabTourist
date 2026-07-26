@@ -8,10 +8,10 @@ import {
   Building2,
   Users,
   Map,
+  Compass,
   type LucideIcon,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { BrandLogo } from "@/components/brand-logo"
 import { ADMIN_NAV } from "@/lib/admin-data"
 
 const ICONS: Record<string, LucideIcon> = {
@@ -28,13 +28,18 @@ export function AdminSidebar({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <div className="flex h-full flex-col gap-2">
       <div className="flex h-16 items-center border-b border-border px-6">
-        <Link href="/" className="flex items-center gap-2">
-          <BrandLogo />
+        <Link href="/" className="flex items-center gap-2.5">
+          <span className="flex size-8 items-center justify-center rounded-lg bg-leather text-primary-foreground">
+            <Compass className="size-4" />
+          </span>
+          <span className="font-display text-lg font-bold tracking-tight text-foreground">
+            Cab<span className="text-copper">Tourist</span>
+          </span>
         </Link>
       </div>
 
       <nav className="flex flex-1 flex-col gap-1 px-3 py-4">
-        <p className="px-3 pb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        <p className="px-3 pb-2 font-handwritten text-sm text-muted-foreground">
           Management
         </p>
         {ADMIN_NAV.map((item) => {
@@ -46,9 +51,9 @@ export function AdminSidebar({ onNavigate }: { onNavigate?: () => void }) {
               href={item.href}
               onClick={onNavigate}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                "flex items-center gap-3 rounded-lg px-3 py-2.5 font-sans text-sm font-medium transition-colors",
                 active
-                  ? "bg-primary text-primary-foreground"
+                  ? "bg-leather text-primary-foreground"
                   : "text-muted-foreground hover:bg-accent hover:text-foreground",
               )}
             >
@@ -59,9 +64,9 @@ export function AdminSidebar({ onNavigate }: { onNavigate?: () => void }) {
         })}
       </nav>
 
-      <div className="mx-3 mb-4 rounded-xl border border-border bg-accent/50 p-4">
-        <p className="text-sm font-semibold text-foreground">CabTourist Admin</p>
-        <p className="mt-1 text-xs text-muted-foreground">
+      <div className="mx-3 mb-4 rounded-lg border border-border bg-accent/50 p-4">
+        <p className="font-sans text-sm font-semibold text-foreground">CabTourist Admin</p>
+        <p className="mt-1 font-handwritten text-sm text-muted-foreground">
           Operations console v1.0
         </p>
       </div>

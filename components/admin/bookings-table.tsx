@@ -14,7 +14,7 @@ export function BookingsTable({ bookings }: { bookings: AdminBooking[] }) {
     <div className="overflow-x-auto">
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow className="border-border/60">
             <TableHead>Booking ID</TableHead>
             <TableHead>Customer</TableHead>
             <TableHead>Route</TableHead>
@@ -27,18 +27,18 @@ export function BookingsTable({ bookings }: { bookings: AdminBooking[] }) {
         </TableHeader>
         <TableBody>
           {bookings.map((b) => (
-            <TableRow key={b.id}>
-              <TableCell className="font-mono text-xs font-medium">{b.id}</TableCell>
-              <TableCell className="font-medium text-foreground">{b.customer}</TableCell>
-              <TableCell className="text-muted-foreground">{b.route}</TableCell>
-              <TableCell className="hidden md:table-cell text-muted-foreground">{b.cab}</TableCell>
-              <TableCell className="hidden lg:table-cell text-muted-foreground">{b.driver}</TableCell>
-              <TableCell className="hidden sm:table-cell text-muted-foreground">{b.date}</TableCell>
-              <TableCell className="text-right font-semibold text-foreground">{inr(b.amount)}</TableCell>
+            <TableRow key={b.id} className="border-border/40">
+              <TableCell className="font-mono text-xs font-medium text-copper">{b.id}</TableCell>
+              <TableCell className="font-sans font-medium text-foreground">{b.customer}</TableCell>
+              <TableCell className="font-sans text-muted-foreground">{b.route}</TableCell>
+              <TableCell className="hidden md:table-cell font-sans text-muted-foreground">{b.cab}</TableCell>
+              <TableCell className="hidden lg:table-cell font-sans text-muted-foreground">{b.driver}</TableCell>
+              <TableCell className="hidden sm:table-cell font-sans text-muted-foreground">{b.date}</TableCell>
+              <TableCell className="text-right font-display font-semibold text-foreground">{inr(b.amount)}</TableCell>
               <TableCell>
                 <span
                   className={cn(
-                    "inline-flex rounded-full px-2.5 py-1 text-xs font-semibold capitalize",
+                    "inline-flex rounded-full px-2.5 py-1 font-sans text-xs font-semibold capitalize",
                     STATUS_STYLES[b.status],
                   )}
                 >

@@ -4,7 +4,6 @@ import { useMemo, useState } from "react"
 import { Search } from "lucide-react"
 import { AdminTopbar } from "@/components/admin/admin-topbar"
 import { BookingsTable } from "@/components/admin/bookings-table"
-import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import { BOOKINGS, type BookingStatus } from "@/lib/admin-data"
@@ -41,8 +40,8 @@ export default function BookingsPage() {
       <main className="space-y-5 p-4 md:p-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-foreground">All bookings</h2>
-            <p className="text-sm text-muted-foreground">
+            <h2 className="font-display text-xl font-semibold text-foreground">All bookings</h2>
+            <p className="font-sans text-sm text-muted-foreground">
               {filtered.length} of {BOOKINGS.length} bookings
             </p>
           </div>
@@ -52,7 +51,7 @@ export default function BookingsPage() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search by name, ID or route"
-              className="h-9 pl-9 sm:w-72"
+              className="h-9 rounded-md pl-9 sm:w-72"
               aria-label="Search bookings"
             />
           </div>
@@ -65,9 +64,9 @@ export default function BookingsPage() {
               type="button"
               onClick={() => setFilter(f.id)}
               className={cn(
-                "rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors",
+                "rounded-md border px-3.5 py-1.5 font-sans text-sm font-medium transition-colors",
                 filter === f.id
-                  ? "border-primary bg-primary text-primary-foreground"
+                  ? "border-leather bg-leather text-primary-foreground"
                   : "border-border bg-background text-muted-foreground hover:text-foreground",
               )}
             >
@@ -76,17 +75,17 @@ export default function BookingsPage() {
           ))}
         </div>
 
-        <Card>
-          <CardContent className="px-0 sm:px-2 py-2">
+        <div className="paper-card rounded-lg border border-border bg-card">
+          <div className="px-0 sm:px-2 py-2">
             {filtered.length > 0 ? (
               <BookingsTable bookings={filtered} />
             ) : (
-              <p className="py-12 text-center text-sm text-muted-foreground">
+              <p className="py-12 text-center font-sans text-sm text-muted-foreground">
                 No bookings match your filters.
               </p>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </main>
     </>
   )

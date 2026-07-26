@@ -1,79 +1,176 @@
 import Image from "next/image"
-import { Star, ShieldCheck } from "lucide-react"
+import { Star, ShieldCheck, Users, MapPin, Gauge } from "lucide-react"
 
 import { STATS } from "@/lib/cabtourist-data"
 import { BookingWidget } from "@/components/booking-widget"
 
+const FEATURED_DESTINATIONS = [
+  {
+    name: "Leh",
+    image: "/images/package-mountain.png",
+    rotation: -3,
+  },
+  {
+    name: "Rajasthan",
+    image: "/images/package-heritage.png",
+    rotation: 2,
+  },
+  {
+    name: "Kerala",
+    image: "/images/package-beach.png",
+    rotation: -2,
+  },
+  {
+    name: "Kerala",
+    image: "/images/package-beach.png",
+    rotation: 3,
+  },
+]
+
 export function Hero() {
   return (
     <section id="top" className="relative overflow-hidden">
-      {/* Background image */}
-      <div className="absolute inset-0 -z-10">
-        <Image
-          src="/images/hero-coastal-drive.png"
-          alt="Luxury cab driving along a scenic coastal mountain highway at golden hour"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/80 to-background" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/85 to-transparent" />
-      </div>
+      {/* Background */}
+      <div className="absolute inset-0 -z-10 bg-background" />
 
-      <div className="mx-auto max-w-6xl px-4 pt-14 pb-10 sm:px-6 md:pt-20 md:pb-16">
-        <div className="max-w-2xl">
-          <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3 py-1 text-xs font-medium text-foreground backdrop-blur">
-            <ShieldCheck className="size-3.5 text-primary" />
-            Verified drivers · Transparent fares · 24/7 support
-          </span>
-          <h1 className="mt-4 text-balance font-display text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl">
-            Every journey, <span className="text-primary">perfectly</span>{" "}
-            driven.
-          </h1>
-          <p className="mt-4 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Book outstation cabs, airport transfers, and curated tour packages
-            with professional chauffeurs. Upfront pricing, live tracking, and
-            free cancellation on every ride.
-          </p>
+      <div className="mx-auto max-w-7xl px-4 pt-12 pb-12 sm:px-6 md:pt-16 md:pb-16 lg:pt-20">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          {/* Left Column - Main Content */}
+          <div className="lg:col-span-2">
+            {/* Vintage badge */}
+            <span className="inline-flex items-center gap-2 rounded-full border border-copper/30 bg-card px-3 py-1.5 text-xs font-medium text-foreground">
+              <ShieldCheck className="size-3.5 text-copper" />
+              Verified drivers · Transparent fares · 24/7 support
+            </span>
 
-          <div className="mt-5 flex items-center gap-2 text-sm text-foreground">
-            <div className="flex items-center gap-0.5 text-cta">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className="size-4 fill-current" />
+            {/* Main heading */}
+            <h1 className="mt-4 text-balance font-display text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl leading-tight">
+              Every journey,{" "}
+              <span className="block text-copper">perfectly driven.</span>
+            </h1>
+
+            <p className="mt-4 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
+              Book outstation cabs, airport transfers, and curated tour packages
+              with professional chauffeurs. Upfront pricing, live tracking, and
+              free cancellation on every ride.
+            </p>
+
+            {/* Rating */}
+            <div className="mt-6 flex items-center gap-3 text-sm text-foreground">
+              <div className="flex items-center gap-0.5 text-cta">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className="size-4 fill-current" />
+                ))}
+              </div>
+              <span className="font-display font-semibold text-lg">4.9/5</span>
+              <span className="text-muted-foreground">
+                from 120,000+ verified trips
+              </span>
+            </div>
+
+            {/* Featured Destinations */}
+            <div className="mt-8">
+              <h2 className="text-sm font-semibold text-muted-foreground mb-4">Popular Destinations</h2>
+              <div className="flex flex-wrap gap-4">
+                {FEATURED_DESTINATIONS.map((dest, idx) => (
+                  <div
+                    key={idx}
+                    className="relative"
+                    style={{
+                      transform: `rotate(${dest.rotation}deg)`,
+                    }}
+                  >
+                    <div className="relative w-20 h-24 rounded-sm border-4 border-white shadow-lg bg-muted overflow-hidden">
+                      <Image
+                        src={dest.image}
+                        alt={dest.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <p className="absolute bottom-1 left-1/2 -translate-x-1/2 text-xs font-semibold text-foreground bg-background/80 px-2 py-0.5 rounded">
+                      {dest.name}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Booking widget */}
+            <div className="mt-10">
+              <BookingWidget />
+            </div>
+          </div>
+
+          {/* Right Column - Stats and Featured Packages */}
+          <div className="lg:col-span-1">
+            {/* Stats Cards */}
+            <div className="space-y-3">
+              {STATS.map((stat, idx) => (
+                <div
+                  key={stat.label}
+                  className="rounded-lg border border-border/70 bg-card p-4 text-center shadow-sm"
+                >
+                  <div className="font-display text-2xl font-bold text-copper">
+                    {stat.value}
+                  </div>
+                  <div className="mt-1 text-sm font-medium text-muted-foreground capitalize">
+                    {stat.label}
+                  </div>
+                </div>
               ))}
             </div>
-            <span className="font-medium">4.9/5</span>
-            <span className="text-muted-foreground">
-              from 120,000+ verified trips
-            </span>
+
+            {/* Featured Packages Section */}
+            <div className="mt-8">
+              <h3 className="text-lg font-bold text-foreground mb-4">Featured Packages</h3>
+              <div className="relative rounded-lg border-2 border-border bg-card p-4">
+                {/* Cork board effect */}
+                <div className="absolute -top-2 left-1/3 w-4 h-4 rounded-full bg-amber-900 shadow-md" />
+                <div className="absolute -top-2 right-1/4 w-4 h-4 rounded-full bg-amber-900 shadow-md" />
+
+                {/* Package cards */}
+                <div className="space-y-3">
+                  <div className="bg-background rounded p-3 text-center border border-dashed border-border">
+                    <div className="text-xs font-semibold text-copper mb-1">Curated Trip</div>
+                    <div className="text-sm font-bold text-foreground">Rajasthan Hills</div>
+                    <div className="text-xs text-muted-foreground mt-1">3 Days</div>
+                  </div>
+                  <div className="bg-background rounded p-3 text-center border border-dashed border-border">
+                    <div className="text-xs font-semibold text-copper mb-1">Curated Trip</div>
+                    <div className="text-sm font-bold text-foreground">Kerala Backwaters</div>
+                    <div className="text-xs text-muted-foreground mt-1">4 Days</div>
+                  </div>
+                  <div className="bg-background rounded p-3 text-center border border-dashed border-border">
+                    <div className="text-xs font-semibold text-copper mb-1">Curated Trip</div>
+                    <div className="text-sm font-bold text-foreground">Leh Adventure</div>
+                    <div className="text-xs text-muted-foreground mt-1">5 Days</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Service Icons */}
+              <div className="mt-6 grid grid-cols-2 gap-3">
+                <div className="text-center p-3 rounded-lg bg-muted/50">
+                  <Users className="size-6 mx-auto text-copper mb-1" />
+                  <p className="text-xs font-medium text-muted-foreground">2M+<br/>Travelers</p>
+                </div>
+                <div className="text-center p-3 rounded-lg bg-muted/50">
+                  <MapPin className="size-6 mx-auto text-copper mb-1" />
+                  <p className="text-xs font-medium text-muted-foreground">450+<br/>Cities</p>
+                </div>
+                <div className="text-center p-3 rounded-lg bg-muted/50">
+                  <Gauge className="size-6 mx-auto text-copper mb-1" />
+                  <p className="text-xs font-medium text-muted-foreground">11K+<br/>Drivers</p>
+                </div>
+                <div className="text-center p-3 rounded-lg bg-muted/50">
+                  <Star className="size-6 mx-auto text-copper mb-1" />
+                  <p className="text-xs font-medium text-muted-foreground">4.9<br/>Rating</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-
-        {/* Booking widget */}
-        <div className="mt-8 md:mt-10">
-          <BookingWidget />
-        </div>
-
-        {/* Stats */}
-        <dl className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          {STATS.map((s) => (
-            <div
-              key={s.label}
-              className="rounded-2xl border border-border/70 bg-card/60 p-4 backdrop-blur"
-            >
-              <dt className="sr-only">{s.label}</dt>
-              <dd>
-                <span className="font-display text-2xl font-bold text-foreground sm:text-3xl">
-                  {s.value}
-                </span>
-                <span className="mt-0.5 block text-xs text-muted-foreground sm:text-sm">
-                  {s.label}
-                </span>
-              </dd>
-            </div>
-          ))}
-        </dl>
       </div>
     </section>
   )

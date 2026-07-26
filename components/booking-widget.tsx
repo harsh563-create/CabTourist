@@ -56,7 +56,6 @@ function estimateDistance(from: string, to: string) {
       (r.from === from && r.to === to) || (r.from === to && r.to === from),
   )
   if (known) return known.distanceKm
-  // deterministic pseudo-distance so estimates stay stable per city pair
   const seed = (from + to)
     .split("")
     .reduce((acc, ch) => acc + ch.charCodeAt(0), 0)
@@ -126,7 +125,6 @@ export function BookingWidget({ className }: { className?: string }) {
   function confirmBooking(e: React.FormEvent) {
     e.preventDefault()
     setSubmitting(true)
-    // Simulated booking request (frontend-only)
     window.setTimeout(() => {
       setBookingId(
         "CT" + Math.random().toString(36).slice(2, 8).toUpperCase(),
@@ -146,12 +144,13 @@ export function BookingWidget({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "rounded-3xl border border-border/70 bg-card/95 p-3 shadow-2xl shadow-primary/5 backdrop-blur supports-[backdrop-filter]:bg-card/80 sm:p-4",
+        "relative rounded-xl border-2 border-border bg-card p-6 sm:p-8",
+        "shadow-[0_4px_16px_rgba(58,46,31,0.12)]",
         className,
       )}
     >
-      {/* Trip type selector */}
-      <div className="flex flex-wrap gap-1.5 rounded-2xl bg-muted/60 p-1.5">
+      {/* Trip type selector - premium tabs */}
+      <div className="relative grid grid-cols-4 gap-2 rounded-lg bg-secondary/40 p-1.5">
         {TRIP_TYPES.map((t) => {
           const active = tripType === t.id
           return (
@@ -161,10 +160,10 @@ export function BookingWidget({ className }: { className?: string }) {
               onClick={() => setTripType(t.id)}
               aria-pressed={active}
               className={cn(
-                "flex-1 rounded-xl px-3 py-2 text-sm font-medium transition-colors",
+                "rounded-lg px-3 py-2.5 font-sans text-sm font-semibold transition-all",
                 active
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground",
+                  ? "bg-cta text-cta-foreground shadow-md"
+                  : "text-muted-foreground hover:text-foreground hover:bg-secondary/60",
               )}
             >
               {t.label}
@@ -173,17 +172,39 @@ export function BookingWidget({ className }: { className?: string }) {
         })}
       </div>
 
-      <form onSubmit={handleSearch} className="mt-3">
-        <div className="grid gap-3 md:grid-cols-2">
-          {/* From / To */}
-          <div className="relative grid gap-3 sm:grid-cols-2">
+      <form onSubmit={handleSearch} className="relative mt-5">
+        <div className="grid gap-4 md:grid-cols-4">
+          {/* Pickup city */}
+          <div className="relative md:col-span-1">
             <Field label="Pickup city" icon={<MapPin className="size-4" />}>
               <Select
                 items={cityItems}
                 value={from}
                 onValueChange={(v: string | null) => v && setFrom(v)}
               >
-                <SelectTrigger className="h-11 w-full rounded-xl border-border bg-background text-base">
+                <SelectTrigger className="h-12 w-full rounded-lg border border-border bg-white text-base font-medium text-foreground">
+                  <SelectValue placeholder="Select city" />
+                </SelectTrigger>
+                <SelectContent>
+                  {CITIES.map((c) => (
+                    <SelectItem key={c} value={c}>
+                      {c}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </Field>
+          </div>
+
+          {/* Drop-off city with swap button */}
+          <div className="relative md:col-span-1">
+            <Field label="Drop-off city" icon={<MapPin className="size-4" />}>
+              <Select
+                items={cityItems}
+                value={to}
+                onValueChange={(v: string | null) => v && setTo(v)}
+              >
+                <SelectTrigger className="h-12 w-full rounded-lg border border-border bg-white text-base font-medium text-foreground">
                   <SelectValue placeholder="Select city" />
                 </SelectTrigger>
                 <SelectContent>
@@ -200,42 +221,27 @@ export function BookingWidget({ className }: { className?: string }) {
               type="button"
               onClick={swap}
               aria-label="Swap pickup and drop-off"
-              className="absolute top-1/2 left-1/2 z-10 hidden size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background text-muted-foreground shadow-sm transition-colors hover:text-foreground sm:flex"
+              className="absolute -right-5 top-1/2 z-10 hidden size-10 -translate-y-1/2 items-center justify-center rounded-full border-2 border-copper bg-white text-copper shadow-md transition-all hover:bg-copper hover:text-white md:flex"
             >
-              <ArrowLeftRight className="size-4" />
+              <ArrowLeftRight className="size-5" />
             </button>
-
-            <Field label="Drop-off city" icon={<MapPin className="size-4" />}>
-              <Select
-                items={cityItems}
-                value={to}
-                onValueChange={(v: string | null) => v && setTo(v)}
-              >
-                <SelectTrigger className="h-11 w-full rounded-xl border-border bg-background text-base">
-                  <SelectValue placeholder="Select city" />
-                </SelectTrigger>
-                <SelectContent>
-                  {CITIES.map((c) => (
-                    <SelectItem key={c} value={c}>
-                      {c}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </Field>
           </div>
 
-          {/* Date / Time */}
-          <div className="grid gap-3 sm:grid-cols-2">
+          {/* Pickup date */}
+          <div className="md:col-span-1">
             <Field label="Pickup date" icon={<CalendarDays className="size-4" />}>
               <Input
                 type="date"
                 min={today}
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="h-11 rounded-xl border-border bg-background text-base"
+                className="h-12 rounded-lg border border-border bg-white text-base font-medium text-foreground"
               />
             </Field>
+          </div>
+
+          {/* Pickup time or Return date */}
+          <div className="md:col-span-1">
             {isRoundTrip ? (
               <Field
                 label="Return date"
@@ -246,7 +252,7 @@ export function BookingWidget({ className }: { className?: string }) {
                   min={date || today}
                   value={returnDate}
                   onChange={(e) => setReturnDate(e.target.value)}
-                  className="h-11 rounded-xl border-border bg-background text-base"
+                  className="h-12 rounded-lg border border-border bg-white text-base font-medium text-foreground"
                 />
               </Field>
             ) : (
@@ -255,7 +261,7 @@ export function BookingWidget({ className }: { className?: string }) {
                   type="time"
                   value={time}
                   onChange={(e) => setTime(e.target.value)}
-                  className="h-11 rounded-xl border-border bg-background text-base"
+                  className="h-12 rounded-lg border border-border bg-white text-base font-medium text-foreground"
                 />
               </Field>
             )}
@@ -263,11 +269,11 @@ export function BookingWidget({ className }: { className?: string }) {
         </div>
 
         {error ? (
-          <p className="mt-3 text-sm font-medium text-destructive">{error}</p>
+          <p className="mt-4 text-sm font-medium text-destructive bg-destructive/10 p-3 rounded-lg">{error}</p>
         ) : null}
 
-        <div className="mt-4 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-muted-foreground">
+        <div className="mt-5 flex flex-col items-center gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="font-sans text-sm text-muted-foreground text-center sm:text-left">
             Approx.{" "}
             <span className="font-semibold text-foreground">
               {distanceKm} km
@@ -277,9 +283,9 @@ export function BookingWidget({ className }: { className?: string }) {
           <Button
             type="submit"
             size="lg"
-            className="h-12 rounded-xl bg-cta px-8 text-base font-semibold text-cta-foreground hover:bg-cta/90"
+            className="w-full sm:w-auto h-12 rounded-lg bg-cta px-8 font-sans text-base font-bold text-cta-foreground hover:bg-cta/90 shadow-lg transition-all"
           >
-            <Search className="size-4" />
+            <Search className="size-5 mr-2" />
             Search cabs
           </Button>
         </div>
@@ -287,8 +293,8 @@ export function BookingWidget({ className }: { className?: string }) {
 
       {/* Booking flow dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-h-[90vh] gap-0 overflow-y-auto p-0 sm:max-w-lg">
-          <DialogHeader className="border-b border-border p-5">
+        <DialogContent className="max-h-[90vh] gap-0 overflow-y-auto rounded-lg border-border p-0 sm:max-w-lg">
+          <DialogHeader className="border-b border-border bg-card/50 p-5">
             <DialogTitle className="font-display text-lg">
               {dialogTitle}
             </DialogTitle>
@@ -313,11 +319,11 @@ export function BookingWidget({ className }: { className?: string }) {
                       onClick={() => chooseCab(cab)}
                       className="flex w-full items-center gap-4 p-4 text-left transition-colors hover:bg-muted/60"
                     >
-                      <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                      <div className="flex size-12 shrink-0 items-center justify-center rounded-lg border border-copper/20 bg-copper/10 text-copper">
                         <CabGlyph id={cab.id} />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="font-semibold text-foreground">
+                        <p className="font-sans font-semibold text-foreground">
                           {cab.name}
                         </p>
                         <p className="truncate text-sm text-muted-foreground">
@@ -336,7 +342,7 @@ export function BookingWidget({ className }: { className?: string }) {
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="font-display text-lg font-bold text-foreground">
+                        <p className="font-display text-lg font-bold text-copper">
                           {inr.format(fare)}
                         </p>
                         <p className="text-xs text-muted-foreground">
@@ -352,16 +358,16 @@ export function BookingWidget({ className }: { className?: string }) {
 
           {step === "details" && selectedCab ? (
             <form onSubmit={confirmBooking} className="p-5">
-              <div className="mb-4 flex items-center justify-between rounded-xl bg-muted/60 p-3">
+              <div className="mb-4 flex items-center justify-between rounded-lg border border-border bg-muted/40 p-3">
                 <div className="flex items-center gap-2 text-sm">
-                  <span className="flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <span className="flex size-9 items-center justify-center rounded-lg border border-copper/20 bg-copper/10 text-copper">
                     <CabGlyph id={selectedCab.id} />
                   </span>
-                  <span className="font-medium text-foreground">
+                  <span className="font-sans font-medium text-foreground">
                     {selectedCab.name}
                   </span>
                 </div>
-                <span className="font-display text-lg font-bold text-foreground">
+                <span className="font-display text-lg font-bold text-copper">
                   {inr.format(
                     computeFare(selectedCab, distanceKm, isRoundTrip),
                   )}
@@ -379,7 +385,7 @@ export function BookingWidget({ className }: { className?: string }) {
                     onChange={(e) =>
                       setPassenger((p) => ({ ...p, name: e.target.value }))
                     }
-                    className="h-11 rounded-xl"
+                    className="h-11 rounded-md"
                   />
                 </div>
                 <div className="grid gap-3 sm:grid-cols-2">
@@ -395,7 +401,7 @@ export function BookingWidget({ className }: { className?: string }) {
                       onChange={(e) =>
                         setPassenger((p) => ({ ...p, phone: e.target.value }))
                       }
-                      className="h-11 rounded-xl"
+                      className="h-11 rounded-md"
                     />
                   </div>
                   <div className="grid gap-1.5">
@@ -409,7 +415,7 @@ export function BookingWidget({ className }: { className?: string }) {
                       onChange={(e) =>
                         setPassenger((p) => ({ ...p, email: e.target.value }))
                       }
-                      className="h-11 rounded-xl"
+                      className="h-11 rounded-md"
                     />
                   </div>
                 </div>
@@ -420,7 +426,7 @@ export function BookingWidget({ className }: { className?: string }) {
                   type="button"
                   variant="outline"
                   size="lg"
-                  className="h-12 flex-1 rounded-xl"
+                  className="h-11 flex-1 rounded-md"
                   onClick={() => setStep("results")}
                 >
                   Back
@@ -429,7 +435,7 @@ export function BookingWidget({ className }: { className?: string }) {
                   type="submit"
                   size="lg"
                   disabled={submitting}
-                  className="h-12 flex-[2] rounded-xl bg-cta text-cta-foreground hover:bg-cta/90"
+                  className="h-11 flex-[2] rounded-md bg-cta text-cta-foreground hover:bg-cta/90"
                 >
                   {submitting ? (
                     <>
@@ -446,7 +452,7 @@ export function BookingWidget({ className }: { className?: string }) {
 
           {step === "confirmed" && selectedCab ? (
             <div className="p-6 text-center">
-              <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <div className="mx-auto flex size-14 items-center justify-center rounded-full border-2 border-copper/30 bg-copper/10 text-copper">
                 <Check className="size-7" />
               </div>
               <h3 className="mt-4 font-display text-xl font-bold text-foreground">
@@ -460,7 +466,7 @@ export function BookingWidget({ className }: { className?: string }) {
                 confirmed. Driver details will be shared 2 hours before pickup.
               </p>
 
-              <div className="mt-5 grid gap-2 rounded-2xl border border-border bg-muted/40 p-4 text-left text-sm">
+              <div className="mt-5 grid gap-2 rounded-lg border border-border bg-muted/40 p-4 text-left text-sm">
                 <Row label="Route" value={`${from} → ${to}`} />
                 <Row label="Cab" value={selectedCab.name} />
                 <Row
@@ -481,16 +487,16 @@ export function BookingWidget({ className }: { className?: string }) {
 
               <div className="mt-4 flex items-center justify-center gap-4 text-xs text-muted-foreground">
                 <span className="inline-flex items-center gap-1">
-                  <BadgeCheck className="size-4 text-primary" /> Verified driver
+                  <BadgeCheck className="size-4 text-copper" /> Verified driver
                 </span>
                 <span className="inline-flex items-center gap-1">
-                  <PhoneCall className="size-4 text-primary" /> 24/7 support
+                  <PhoneCall className="size-4 text-copper" /> 24/7 support
                 </span>
               </div>
 
               <Button
                 size="lg"
-                className="mt-5 h-12 w-full rounded-xl"
+                className="mt-5 h-11 w-full rounded-md"
                 onClick={() => setOpen(false)}
               >
                 Done
@@ -514,8 +520,8 @@ function Field({
 }) {
   return (
     <label className="grid gap-1.5">
-      <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-        <span className="text-primary">{icon}</span>
+      <span className="flex items-center gap-1.5 font-sans text-xs font-medium text-muted-foreground">
+        <span className="text-copper">{icon}</span>
         {label}
       </span>
       {children}
@@ -538,7 +544,7 @@ function Row({
       <span
         className={cn(
           "text-foreground",
-          strong ? "font-display text-base font-bold" : "font-medium",
+          strong ? "font-display text-base font-bold" : "font-sans font-medium",
         )}
       >
         {value}
@@ -548,7 +554,6 @@ function Row({
 }
 
 function CabGlyph({ id }: { id: string }) {
-  // simple sizing accent per cab tier using the same car icon
   return (
     <svg
       viewBox="0 0 24 24"

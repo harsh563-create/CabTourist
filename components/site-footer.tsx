@@ -1,6 +1,4 @@
-import { Mail, MapPin, Phone } from "lucide-react"
-
-import { BrandLogo } from "@/components/brand-logo"
+import { Mail, MapPin, Phone, Compass } from "lucide-react"
 
 const COLUMNS = [
   {
@@ -25,29 +23,31 @@ const COLUMNS = [
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border bg-card">
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <footer className="border-t border-border bg-card/50">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
         <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
-            <div className="flex items-center gap-2">
-              <BrandLogo />
+            <div className="flex items-center gap-2.5">
+              <span className="flex size-8 items-center justify-center rounded-lg bg-leather text-primary-foreground">
+                <Compass className="size-4" />
+              </span>
               <span className="font-display text-lg font-bold tracking-tight text-foreground">
-                Cab<span className="text-primary">Tourist</span>
+                Cab<span className="text-copper">Tourist</span>
               </span>
             </div>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
+            <p className="mt-4 max-w-xs font-sans text-sm leading-relaxed text-muted-foreground">
               Premium cabs and curated tour packages with verified drivers,
               transparent fares, and round-the-clock support.
             </p>
-            <ul className="mt-5 space-y-2 text-sm text-muted-foreground">
+            <ul className="mt-5 space-y-2 font-sans text-sm text-muted-foreground">
               <li className="flex items-center gap-2">
-                <Phone className="size-4 text-primary" /> 1800-000-000
+                <Phone className="size-4 text-copper" /> 1800-000-000
               </li>
               <li className="flex items-center gap-2">
-                <Mail className="size-4 text-primary" /> hello@cabtourist.com
+                <Mail className="size-4 text-copper" /> hello@cabtourist.com
               </li>
               <li className="flex items-center gap-2">
-                <MapPin className="size-4 text-primary" /> Bengaluru, India
+                <MapPin className="size-4 text-copper" /> Bengaluru, India
               </li>
             </ul>
           </div>
@@ -62,7 +62,7 @@ export function SiteFooter() {
                   <li key={link}>
                     <a
                       href="#"
-                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                      className="font-sans text-sm text-muted-foreground transition-colors hover:text-copper"
                     >
                       {link}
                     </a>
@@ -73,9 +73,18 @@ export function SiteFooter() {
           ))}
         </div>
 
-        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-border pt-6 text-sm text-muted-foreground sm:flex-row">
-          <p>© {new Date().getFullYear()} CabTourist. All rights reserved.</p>
-          <p>Made for travelers, everywhere.</p>
+        {/* Vintage divider */}
+        <div className="vintage-divider my-8">
+          <span className="font-handwritten text-sm">✦</span>
+        </div>
+
+        <div className="flex flex-col items-center justify-between gap-3 text-sm text-muted-foreground sm:flex-row">
+          <p className="font-sans">
+            © {new Date().getFullYear()} CabTourist. All rights reserved.
+          </p>
+          <p className="font-handwritten text-base">
+            Made for travelers, everywhere.
+          </p>
         </div>
       </div>
     </footer>

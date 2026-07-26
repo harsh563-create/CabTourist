@@ -1,17 +1,20 @@
-import { Quote, Star } from "lucide-react"
+import { Quote, Star, Stamp } from "lucide-react"
 
+import { cn } from "@/lib/utils"
 import { REVIEWS } from "@/lib/cabtourist-data"
 import {
   Avatar,
   AvatarFallback,
 } from "@/components/ui/avatar"
 
+const CARD_ROTATIONS = ["rotate-[0.5deg]", "rotate-[-0.4deg]", "rotate-[0.8deg]"]
+
 export function Reviews() {
   return (
-    <section id="reviews" className="bg-muted/40 py-16 md:py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+    <section id="reviews" className="py-16 md:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
-          <span className="text-sm font-semibold text-primary">
+          <span className="font-handwritten text-base text-copper">
             Traveler stories
           </span>
           <h2 className="mt-2 text-balance font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
@@ -20,36 +23,50 @@ export function Reviews() {
         </div>
 
         <ul className="mt-10 grid gap-6 md:grid-cols-3">
-          {REVIEWS.map((r) => (
+          {REVIEWS.map((r, i) => (
             <li
               key={r.id}
-              className="flex flex-col rounded-3xl border border-border bg-card p-6 shadow-sm"
+              className={cn(
+                "relative flex flex-col rounded-sm border border-border bg-card p-6",
+                "shadow-[0_2px_8px_rgba(58,46,31,0.06),0_1px_3px_rgba(58,46,31,0.04)]",
+                CARD_ROTATIONS[i % CARD_ROTATIONS.length],
+              )}
             >
-              <Quote className="size-7 text-primary/30" />
-              <div className="mt-3 flex items-center gap-0.5 text-cta">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star
-                    key={i}
-                    className={
-                      i < r.rating ? "size-4 fill-current" : "size-4 opacity-25"
-                    }
-                  />
-                ))}
+              {/* Vintage stamp decoration */}
+              <div className="absolute top-4 right-4 opacity-10">
+                <Stamp className="size-10 text-copper" />
               </div>
-              <p className="mt-3 flex-1 text-pretty leading-relaxed text-foreground">
+
+              {/* Postcard border accent */}
+              <div className="mb-3 border-b-2 border-dashed border-border/60 pb-3">
+                <Quote className="size-6 text-copper/40" />
+                <div className="mt-2 flex items-center gap-0.5 text-cta">
+                  {Array.from({ length: 5 }).map((_, j) => (
+                    <Star
+                      key={j}
+                      className={
+                        j < r.rating ? "size-4 fill-current" : "size-4 opacity-25"
+                      }
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <p className="flex-1 font-sans text-sm leading-relaxed text-foreground">
                 &ldquo;{r.quote}&rdquo;
               </p>
-              <div className="mt-5 flex items-center gap-3 border-t border-border pt-4">
-                <Avatar className="size-10">
-                  <AvatarFallback className="bg-primary/10 font-semibold text-primary">
+
+              <div className="mt-5 flex items-center gap-3 border-t border-border/60 pt-4">
+                <Avatar className="size-10 border-2 border-border/60">
+                  <AvatarFallback className="bg-copper/10 font-display text-sm font-semibold text-copper">
                     {r.initials}
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="text-sm font-semibold text-foreground">
+                  <p className="font-sans text-sm font-semibold text-foreground">
                     {r.name}
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="font-handwritten text-sm text-muted-foreground">
                     {r.location} · {r.trip}
                   </p>
                 </div>

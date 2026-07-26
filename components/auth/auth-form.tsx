@@ -151,7 +151,7 @@ export function AuthForm({ mode, className }: AuthFormProps) {
         <h1 className="font-display text-2xl font-bold tracking-tight">
           {isSignup ? "Create your account" : "Welcome back"}
         </h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="font-sans text-sm text-muted-foreground">
           {isSignup
             ? "Start your journey with CabTourist today"
             : "Sign in to manage your bookings and trips"}
@@ -161,7 +161,7 @@ export function AuthForm({ mode, className }: AuthFormProps) {
       <div className="flex flex-col gap-4">
         <Button
           variant="outline"
-          className="h-11 w-full gap-3 text-base"
+          className="h-11 w-full gap-3 rounded-md border-border font-sans text-base"
           onClick={handleGoogleLogin}
           disabled={loading}
         >
@@ -169,13 +169,11 @@ export function AuthForm({ mode, className }: AuthFormProps) {
           Continue with Google
         </Button>
 
-        <div className="relative flex items-center gap-4">
-          <Separator className="flex-1" />
-          <span className="text-xs text-muted-foreground">or</span>
-          <Separator className="flex-1" />
+        <div className="vintage-divider">
+          <span className="font-handwritten text-sm">or</span>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 rounded-lg border bg-muted/50 p-1">
+        <div className="grid grid-cols-2 gap-1 rounded-lg border border-border/60 bg-muted/40 p-1">
           <button
             onClick={() => {
               setAuthMode("email")
@@ -184,9 +182,9 @@ export function AuthForm({ mode, className }: AuthFormProps) {
               setOtpError("")
             }}
             className={cn(
-              "flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-all",
+              "flex items-center justify-center gap-2 rounded-md px-3 py-2 font-sans text-sm font-medium transition-all",
               authMode === "email"
-                ? "bg-background text-foreground shadow-sm"
+                ? "bg-card text-foreground shadow-sm border border-border/40"
                 : "text-muted-foreground hover:text-foreground"
             )}
           >
@@ -201,9 +199,9 @@ export function AuthForm({ mode, className }: AuthFormProps) {
               setOtpError("")
             }}
             className={cn(
-              "flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-all",
+              "flex items-center justify-center gap-2 rounded-md px-3 py-2 font-sans text-sm font-medium transition-all",
               authMode === "phone"
-                ? "bg-background text-foreground shadow-sm"
+                ? "bg-card text-foreground shadow-sm border border-border/40"
                 : "text-muted-foreground hover:text-foreground"
             )}
           >
@@ -223,7 +221,7 @@ export function AuthForm({ mode, className }: AuthFormProps) {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  className="h-11"
+                  className="h-11 rounded-md"
                 />
               </div>
             )}
@@ -236,7 +234,7 @@ export function AuthForm({ mode, className }: AuthFormProps) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="h-11"
+                className="h-11 rounded-md"
               />
             </div>
             <div className="flex flex-col gap-1.5">
@@ -249,7 +247,7 @@ export function AuthForm({ mode, className }: AuthFormProps) {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="h-11 pr-10"
+                  className="h-11 rounded-md pr-10"
                 />
                 <button
                   type="button"
@@ -265,14 +263,14 @@ export function AuthForm({ mode, className }: AuthFormProps) {
               <div className="flex justify-end">
                 <button
                   type="button"
-                  className="text-xs font-medium text-primary hover:underline"
+                  className="font-sans text-xs font-medium text-copper hover:underline"
                 >
                   Forgot password?
                 </button>
               </div>
             )}
 
-            <Button type="submit" className="h-11 w-full rounded-full text-base" disabled={loading}>
+            <Button type="submit" className="h-11 w-full rounded-md bg-leather font-sans text-base text-primary-foreground hover:bg-leather/90" disabled={loading}>
               {loading && <Loader2 className="size-4 animate-spin" />}
               {isSignup ? "Create account" : "Sign in"}
             </Button>
@@ -281,8 +279,8 @@ export function AuthForm({ mode, className }: AuthFormProps) {
           <div className="flex flex-col gap-4">
             {otpVerified ? (
               <div className="flex flex-col items-center gap-3 py-4">
-                <CheckCircle2 className="size-12 text-green-500" />
-                <p className="text-sm font-medium">Phone verified successfully!</p>
+                <CheckCircle2 className="size-12 text-green-600" />
+                <p className="font-sans text-sm font-medium">Phone verified successfully!</p>
                 <Loader2 className="size-4 animate-spin text-muted-foreground" />
               </div>
             ) : !otpSent ? (
@@ -296,14 +294,14 @@ export function AuthForm({ mode, className }: AuthFormProps) {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       required
-                      className="h-11"
+                      className="h-11 rounded-md"
                     />
                   </div>
                 )}
                 <div className="flex flex-col gap-1.5">
                   <Label htmlFor="phone">Mobile number</Label>
                   <div className="flex gap-2">
-                    <div className="flex h-11 w-16 items-center justify-center rounded-lg border bg-muted/50 text-sm font-medium">
+                    <div className="flex h-11 w-16 items-center justify-center rounded-md border border-border bg-muted/40 font-sans text-sm font-medium">
                       +91
                     </div>
                     <Input
@@ -316,13 +314,13 @@ export function AuthForm({ mode, className }: AuthFormProps) {
                       }
                       required
                       maxLength={10}
-                      className="h-11 flex-1"
+                      className="h-11 flex-1 rounded-md"
                     />
                   </div>
                 </div>
                 <Button
                   onClick={handleSendOtp}
-                  className="h-11 w-full rounded-full text-base"
+                  className="h-11 w-full rounded-md bg-leather font-sans text-base text-primary-foreground hover:bg-leather/90"
                   disabled={loading || phone.length < 10}
                 >
                   {loading && <Loader2 className="size-4 animate-spin" />}
@@ -343,8 +341,8 @@ export function AuthForm({ mode, className }: AuthFormProps) {
                     <ArrowLeft className="size-4" />
                   </button>
                   <div className="flex flex-col">
-                    <span className="text-sm font-medium">Enter OTP</span>
-                    <span className="text-xs text-muted-foreground">
+                    <span className="font-sans text-sm font-medium">Enter OTP</span>
+                    <span className="font-sans text-xs text-muted-foreground">
                       Sent to +91 {phone}
                     </span>
                   </div>
@@ -365,27 +363,27 @@ export function AuthForm({ mode, className }: AuthFormProps) {
                       onKeyDown={(e) => handleOtpKeyDown(i, e)}
                       onPaste={i === 0 ? handleOtpPaste : undefined}
                       className={cn(
-                        "size-12 rounded-lg border bg-transparent text-center text-lg font-semibold outline-none transition-all focus:border-ring focus:ring-3 focus:ring-ring/50",
+                        "size-12 rounded-md border border-border bg-background font-sans text-center text-lg font-semibold outline-none transition-all focus:border-copper focus:ring-3 focus:ring-copper/20",
                         otpError && "border-destructive focus:border-destructive focus:ring-destructive/20",
-                        digit && "border-primary/50"
+                        digit && "border-copper/50"
                       )}
                     />
                   ))}
                 </div>
 
                 {otpError && (
-                  <p className="text-center text-xs text-destructive">{otpError}</p>
+                  <p className="text-center font-sans text-xs text-destructive">{otpError}</p>
                 )}
 
                 {loading && (
                   <div className="flex items-center justify-center gap-2 py-2">
-                    <Loader2 className="size-4 animate-spin text-primary" />
-                    <span className="text-sm text-muted-foreground">Verifying...</span>
+                    <Loader2 className="size-4 animate-spin text-copper" />
+                    <span className="font-sans text-sm text-muted-foreground">Verifying...</span>
                   </div>
                 )}
 
                 <div className="text-center">
-                  <span className="text-sm text-muted-foreground">
+                  <span className="font-sans text-sm text-muted-foreground">
                     Didn&apos;t receive the OTP?{" "}
                   </span>
                   <button
@@ -393,10 +391,10 @@ export function AuthForm({ mode, className }: AuthFormProps) {
                     onClick={handleResendOtp}
                     disabled={otpCountdown > 0}
                     className={cn(
-                      "text-sm font-medium",
+                      "font-sans text-sm font-medium",
                       otpCountdown > 0
                         ? "text-muted-foreground cursor-not-allowed"
-                        : "text-primary hover:underline"
+                        : "text-copper hover:underline"
                     )}
                   >
                     {otpCountdown > 0
@@ -410,11 +408,11 @@ export function AuthForm({ mode, className }: AuthFormProps) {
         )}
       </div>
 
-      <p className="text-center text-sm text-muted-foreground">
+      <p className="text-center font-sans text-sm text-muted-foreground">
         {isSignup ? "Already have an account?" : "Don't have an account?"}{" "}
         <a
           href={isSignup ? "/login" : "/signup"}
-          className="font-medium text-primary hover:underline"
+          className="font-medium text-copper hover:underline"
         >
           {isSignup ? "Sign in" : "Create one"}
         </a>

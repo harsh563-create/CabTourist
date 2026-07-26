@@ -1,23 +1,29 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
-import { Inter, Sora } from 'next/font/google'
+import { Playfair_Display, Lora, Caveat } from 'next/font/google'
 import { ThemeProvider } from '@/components/theme-provider'
 import './globals.css'
 
-const inter = Inter({
+const playfair = Playfair_Display({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-playfair',
   display: 'swap',
 })
 
-const sora = Sora({
+const lora = Lora({
   subsets: ['latin'],
-  variable: '--font-sora',
+  variable: '--font-lora',
+  display: 'swap',
+})
+
+const caveat = Caveat({
+  subsets: ['latin'],
+  variable: '--font-caveat',
   display: 'swap',
 })
 
 export const metadata: Metadata = {
-  title: 'CabTourist — Premium Cabs & Guided Tour Packages',
+  title: 'CabTourist — Vintage Cabs & Guided Tour Packages',
   description:
     'Book reliable outstation cabs, airport transfers, and curated tour packages with verified drivers, transparent pricing, and 24/7 support. Travel smarter with CabTourist.',
   keywords: [
@@ -35,8 +41,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   colorScheme: 'dark light',
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f8fafc' },
-    { media: '(prefers-color-scheme: dark)', color: '#0b1220' },
+    { media: '(prefers-color-scheme: light)', color: '#f5eed6' },
+    { media: '(prefers-color-scheme: dark)', color: '#1e170e' },
   ],
 }
 
@@ -48,14 +54,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${sora.variable} bg-background`}
+      className={`${playfair.variable} ${lora.variable} ${caveat.variable} bg-background`}
       suppressHydrationWarning
     >
       <body className="font-sans antialiased">
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
-          enableSystem
+          defaultTheme="light"
+          enableSystem={false}
           disableTransitionOnChange
         >
           {children}
