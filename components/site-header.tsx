@@ -14,6 +14,7 @@ const NAV = [
   { label: "Why us", href: "#why" },
   { label: "Reviews", href: "#reviews" },
   { label: "FAQ", href: "#faq" },
+  { label: "Contact", href: "/contact" },
 ]
 
 export function SiteHeader() {

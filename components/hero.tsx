@@ -4,29 +4,6 @@ import { Star, ShieldCheck, Users, MapPin, Gauge } from "lucide-react"
 import { STATS } from "@/lib/cabtourist-data"
 import { BookingWidget } from "@/components/booking-widget"
 
-const FEATURED_DESTINATIONS = [
-  {
-    name: "Leh",
-    image: "/images/package-mountain.png",
-    rotation: -3,
-  },
-  {
-    name: "Rajasthan",
-    image: "/images/package-heritage.png",
-    rotation: 2,
-  },
-  {
-    name: "Kerala",
-    image: "/images/package-beach.png",
-    rotation: -2,
-  },
-  {
-    name: "Kerala",
-    image: "/images/package-beach.png",
-    rotation: 3,
-  },
-]
-
 export function Hero() {
   return (
     <section id="top" className="relative overflow-hidden">
@@ -66,34 +43,6 @@ export function Hero() {
               <span className="text-muted-foreground">
                 from 120,000+ verified trips
               </span>
-            </div>
-
-            {/* Featured Destinations */}
-            <div className="mt-8">
-              <h2 className="text-sm font-semibold text-muted-foreground mb-4">Popular Destinations</h2>
-              <div className="flex flex-wrap gap-4">
-                {FEATURED_DESTINATIONS.map((dest, idx) => (
-                  <div
-                    key={idx}
-                    className="relative"
-                    style={{
-                      transform: `rotate(${dest.rotation}deg)`,
-                    }}
-                  >
-                    <div className="relative w-20 h-24 rounded-sm border-4 border-white shadow-lg bg-muted overflow-hidden">
-                      <Image
-                        src={dest.image}
-                        alt={dest.name}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                    <p className="absolute bottom-1 left-1/2 -translate-x-1/2 text-xs font-semibold text-foreground bg-background/80 px-2 py-0.5 rounded">
-                      {dest.name}
-                    </p>
-                  </div>
-                ))}
-              </div>
             </div>
 
             {/* Booking widget */}
@@ -150,7 +99,7 @@ export function Hero() {
               </div>
 
               {/* Service Icons */}
-              <div className="mt-6 grid grid-cols-2 gap-3">
+              {/* <div className="mt-6 grid grid-cols-2 gap-3">
                 <div className="text-center p-3 rounded-lg bg-muted/50">
                   <Users className="size-6 mx-auto text-copper mb-1" />
                   <p className="text-xs font-medium text-muted-foreground">2M+<br/>Travelers</p>
@@ -167,7 +116,7 @@ export function Hero() {
                   <Star className="size-6 mx-auto text-copper mb-1" />
                   <p className="text-xs font-medium text-muted-foreground">4.9<br/>Rating</p>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
