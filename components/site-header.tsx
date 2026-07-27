@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Menu, Phone, X, Compass } from "lucide-react"
+import { Menu, Phone, X, CalendarCheck } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -69,8 +69,15 @@ export function SiteHeader() {
           </a>
           <ThemeToggle />
           <a
+            href="/book"
+            className="hidden items-center gap-1.5 rounded-lg bg-leather px-5 py-2 text-sm font-bold text-primary-foreground shadow-md transition-all hover:bg-leather/90 sm:inline-flex"
+          >
+            <CalendarCheck className="size-4" />
+            Book Now
+          </a>
+          <a
             href="/login"
-            className="hidden items-center gap-1.5 rounded-lg bg-cta px-5 py-2 text-sm font-bold text-cta-foreground shadow-md transition-all hover:bg-cta/90 sm:inline-flex"
+            className="hidden items-center gap-1.5 rounded-lg border-2 border-copper bg-card/70 px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-secondary sm:inline-flex"
           >
             Sign In
           </a>
@@ -101,8 +108,16 @@ export function SiteHeader() {
               </a>
             ))}
             <a
+              href="/book"
+              onClick={() => setOpen(false)}
+              className="mt-2 flex items-center justify-center gap-2 rounded-lg bg-cta px-4 py-2.5 text-sm font-bold text-cta-foreground shadow-md transition-all hover:bg-cta/90"
+            >
+              <CalendarCheck className="size-4" />
+              Book Now
+            </a>
+            <a
               href="/login"
-              className="mt-2 flex items-center justify-center gap-1.5 rounded-lg bg-leather px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-all hover:bg-leather/90"
+              className="mt-2 flex items-center justify-center gap-1.5 rounded-lg border-2 border-copper bg-card/70 px-4 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-secondary"
             >
               Sign in
             </a>
