@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { AdminTopbar } from "@/components/admin/admin-topbar"
+import { AdminWelcome } from "@/components/admin/admin-welcome"
 import { StatCards } from "@/components/admin/stat-cards"
 import { DashboardCharts } from "@/components/admin/dashboard-charts"
 import { BookingsTable } from "@/components/admin/bookings-table"
@@ -11,14 +12,7 @@ export default function AdminDashboardPage() {
     <>
       <AdminTopbar title="Dashboard" />
       <main className="space-y-6 p-4 md:p-6">
-        <div>
-          <h2 className="font-display text-xl font-semibold text-foreground text-balance">
-            Welcome back, Admin
-          </h2>
-          <p className="font-sans text-sm text-muted-foreground">
-            Here is what is happening across CabTourist today.
-          </p>
-        </div>
+        <AdminWelcome />
 
         <StatCards />
         <DashboardCharts />

@@ -131,3 +131,14 @@ export const VENDOR_STATUS_STYLES: Record<VendorStatus, string> = {
   pending: "bg-cta/15 text-cta",
   suspended: "bg-destructive/15 text-destructive",
 }
+
+export const CUSTOMER_TIERS = ["New", "Silver", "Gold", "Platinum"] as const
+
+export type CustomerTier = (typeof CUSTOMER_TIERS)[number]
+
+export const TIER_STYLES: Record<CustomerTier, string> = {
+  New: "bg-muted-foreground/15 text-muted-foreground",
+  Silver: "bg-muted/70 text-foreground",
+  Gold: "bg-cta/15 text-cta",
+  Platinum: "bg-primary/15 text-primary",
+}

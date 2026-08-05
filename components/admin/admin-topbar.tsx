@@ -1,16 +1,30 @@
 "use client"
 
-import { useState } from "react"
-import { Menu, Search, Bell } from "lucide-react"
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import { Menu, Search, Bell, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { AdminSidebar } from "@/components/admin/admin-sidebar"
+import { clearAdminSession, getAdminUser } from "@/lib/admin-auth"
 
 export function AdminTopbar({ title }: { title: string }) {
+  const router = useRouter()
   const [open, setOpen] = useState(false)
+  const [adminName, setAdminName] = useState("Admin")
+
+  useEffect(() => {
+    const user = getAdminUser()
+    if (user) setAdminName(user.name)
+  }, [])
+
+  const handleLogout = () => {
+    clearAdminSession()
+    router.replace("/admin/login")
+  }
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border bg-background/80 px-4 backdrop-blur md:px-6">
@@ -44,11 +58,31 @@ export function AdminTopbar({ title }: { title: string }) {
           <Bell className="size-5" />
           <span className="absolute right-2 top-2 size-2 rounded-full bg-cta" />
         </Button>
+        <div className="hidden text-right sm:block">
+          <p className="font-sans text-sm font-semibold leading-tight text-foreground">
+            {adminName}
+          </p>
+          <p className="font-sans text-xs text-muted-foreground">Administrator</p>
+        </div>
         <Avatar className="size-9 border-2 border-border/60">
           <AvatarFallback className="bg-copper/10 font-display text-xs font-semibold text-copper">
-            AD
+            {adminName
+              .split(" ")
+              .map((w) => w[0])
+              .slice(0, 2)
+              .join("")
+              .toUpperCase()}
           </AvatarFallback>
         </Avatar>
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label="Sign out"
+          className="text-muted-foreground hover:text-destructive"
+          onClick={handleLogout}
+        >
+          <LogOut className="size-5" />
+        </Button>
       </div>
     </header>
   )
