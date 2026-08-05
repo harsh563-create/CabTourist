@@ -1,19 +1,19 @@
 "use client"
 
 import * as React from "react"
+import Link from "next/link"
 import { Menu, Phone, X, CalendarCheck } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { BrandLogo } from "@/components/brand-logo"
 
 const NAV = [
-  { label: "Routes", href: "#routes" },
-  { label: "Packages", href: "#packages" },
-  { label: "Why us", href: "#why" },
-  { label: "Reviews", href: "#reviews" },
-  { label: "FAQ", href: "#faq" },
+  { label: "Routes", href: "/routes" },
+  { label: "Packages", href: "/packages" },
+  { label: "Why us", href: "/why-us" },
+  { label: "Reviews", href: "/reviews" },
+  { label: "FAQ", href: "/faq" },
   { label: "Contact", href: "/contact" },
 ]
 
@@ -38,24 +38,24 @@ export function SiteHeader() {
       )}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
-        <a href="#top" className="flex items-center gap-2.5">
+        <Link href="/" onClick={() => setOpen(false)} className="flex items-center gap-2.5">
           <span className="flex size-9 items-center justify-center rounded-lg bg-cta text-cta-foreground font-bold">
             CT
           </span>
           <span className="font-display text-xl font-bold tracking-tight text-foreground">
             Cab<span className="text-copper">Tourist</span>
           </span>
-        </a>
+        </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
           {NAV.map((item) => (
-            <a
+            <Link
               key={item.href}
               href={item.href}
               className="rounded-lg px-3 py-2 font-sans text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
               {item.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -68,19 +68,19 @@ export function SiteHeader() {
             1800-000-000
           </a>
           <ThemeToggle />
-          <a
+          <Link
             href="/book"
             className="hidden items-center gap-1.5 rounded-lg bg-leather px-5 py-2 text-sm font-bold text-primary-foreground shadow-md transition-all hover:bg-leather/90 sm:inline-flex"
           >
             <CalendarCheck className="size-4" />
             Book Now
-          </a>
-          <a
+          </Link>
+          <Link
             href="/login"
             className="hidden items-center gap-1.5 rounded-lg border-2 border-copper bg-card/70 px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-secondary sm:inline-flex"
           >
             Sign In
-          </a>
+          </Link>
           <Button
             variant="outline"
             size="icon"
@@ -98,29 +98,30 @@ export function SiteHeader() {
         <div className="border-t border-border bg-background/95 backdrop-blur-md md:hidden">
           <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3 sm:px-6">
             {NAV.map((item) => (
-              <a
+              <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
                 className="rounded-lg px-3 py-2.5 font-sans text-sm font-medium text-foreground hover:bg-muted"
               >
                 {item.label}
-              </a>
+              </Link>
             ))}
-            <a
+            <Link
               href="/book"
               onClick={() => setOpen(false)}
               className="mt-2 flex items-center justify-center gap-2 rounded-lg bg-cta px-4 py-2.5 text-sm font-bold text-cta-foreground shadow-md transition-all hover:bg-cta/90"
             >
               <CalendarCheck className="size-4" />
               Book Now
-            </a>
-            <a
+            </Link>
+            <Link
               href="/login"
+              onClick={() => setOpen(false)}
               className="mt-2 flex items-center justify-center gap-1.5 rounded-lg border-2 border-copper bg-card/70 px-4 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-secondary"
             >
               Sign in
-            </a>
+            </Link>
           </nav>
         </div>
       ) : null}

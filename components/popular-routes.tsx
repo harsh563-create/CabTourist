@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { ArrowRight, Clock, MapPin, TrendingUp } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -11,35 +12,37 @@ const inr = new Intl.NumberFormat("en-IN", {
 
 const ROTATIONS = ["rotate-[-1deg]", "rotate-[0.5deg]", "rotate-[-0.8deg]", "rotate-[1.2deg]"]
 
-export function PopularRoutes() {
+export function PopularRoutes({ heading = true }: { heading?: boolean }) {
   return (
     <section id="routes" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-20">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div className="max-w-xl">
-          <span className="font-handwritten text-base text-copper">
-            Popular outstation routes
-          </span>
-          <h2 className="mt-2 text-balance font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Loved routes at fixed, fair prices
-          </h2>
-          <p className="mt-3 text-pretty text-muted-foreground">
-            Handpicked intercity trips travelers book again and again — with
-            all-inclusive fares and top-rated drivers.
-          </p>
+      {heading ? (
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div className="max-w-xl">
+            <span className="font-handwritten text-base text-copper">
+              Popular outstation routes
+            </span>
+            <h2 className="mt-2 text-balance font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              Loved routes at fixed, fair prices
+            </h2>
+            <p className="mt-3 text-pretty text-muted-foreground">
+              Handpicked intercity trips travelers book again and again — with
+              all-inclusive fares and top-rated drivers.
+            </p>
+          </div>
+          <Link
+            href="/book"
+            className="inline-flex items-center gap-1 font-sans text-sm font-medium text-copper hover:underline"
+          >
+            Search any route <ArrowRight className="size-4" />
+          </Link>
         </div>
-        <a
-          href="#top"
-          className="inline-flex items-center gap-1 font-sans text-sm font-medium text-copper hover:underline"
-        >
-          Search any route <ArrowRight className="size-4" />
-        </a>
-      </div>
+      ) : null}
 
-      <ul className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <ul className={cn("grid gap-5 sm:grid-cols-2 lg:grid-cols-4", heading ? "mt-8" : "mt-0")}>
         {POPULAR_ROUTES.map((route, i) => (
           <li key={route.id}>
-            <a
-              href="#top"
+            <Link
+              href="/book"
               className={cn(
                 "group flex h-full flex-col rounded-sm bg-card p-4 transition-all",
                 "border border-border/60",
@@ -91,7 +94,7 @@ export function PopularRoutes() {
                   <ArrowRight className="size-3.5" />
                 </span>
               </div>
-            </a>
+            </Link>
           </li>
         ))}
       </ul>

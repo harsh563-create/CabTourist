@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 import { Check, MapPin, Star, Map } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -12,26 +13,28 @@ const inr = new Intl.NumberFormat("en-IN", {
 
 const CARD_ROTATIONS = ["rotate-[-0.5deg]", "rotate-[0.3deg]", "rotate-[-0.7deg]"]
 
-export function TourPackages() {
+export function TourPackages({ heading = true }: { heading?: boolean }) {
   return (
     <section id="packages" className="py-16 md:py-20">
       {/* Corkboard background */}
       <div className="cork-bg py-16 md:py-20 -my-16 md:-my-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="mx-auto max-w-2xl text-center">
-            <span className="font-handwritten text-base text-copper">
-              Curated tour packages
-            </span>
-            <h2 className="mt-2 text-balance font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              Ready-to-go trips with cabs included
-            </h2>
-            <p className="mt-3 text-pretty text-muted-foreground">
-              Multi-day getaways with private chauffeurs, handpicked stays, and
-              local guides. Just pack and go.
-            </p>
-          </div>
+          {heading ? (
+            <div className="mx-auto max-w-2xl text-center">
+              <span className="font-handwritten text-base text-copper">
+                Curated tour packages
+              </span>
+              <h2 className="mt-2 text-balance font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                Ready-to-go trips with cabs included
+              </h2>
+              <p className="mt-3 text-pretty text-muted-foreground">
+                Multi-day getaways with private chauffeurs, handpicked stays, and
+                local guides. Just pack and go.
+              </p>
+            </div>
+          ) : null}
 
-          <ul className="mt-10 grid gap-8 md:grid-cols-3">
+          <ul className={cn("grid gap-8 md:grid-cols-3", heading ? "mt-10" : "mt-0")}>
             {TOUR_PACKAGES.map((pkg, i) => (
               <li
                 key={pkg.id}
@@ -100,13 +103,13 @@ export function TourPackages() {
                         {inr.format(pkg.fromPrice)}
                       </p>
                     </div>
-                    <a
-                      href="#top"
+                    <Link
+                      href="/book"
                       className="inline-flex items-center justify-center rounded-md bg-leather px-3.5 py-1.5 font-sans text-sm font-medium text-primary-foreground shadow-sm transition-all hover:bg-leather/90"
                     >
                       <Map className="size-3.5 mr-1.5" />
                       View package
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </li>

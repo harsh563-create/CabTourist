@@ -9,20 +9,22 @@ import {
 
 const CARD_ROTATIONS = ["rotate-[0.5deg]", "rotate-[-0.4deg]", "rotate-[0.8deg]"]
 
-export function Reviews() {
+export function Reviews({ heading = true }: { heading?: boolean }) {
   return (
     <section id="reviews" className="py-16 md:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="mx-auto max-w-2xl text-center">
-          <span className="font-handwritten text-base text-copper">
-            Traveler stories
-          </span>
-          <h2 className="mt-2 text-balance font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Rated 4.9 by travelers across India
-          </h2>
-        </div>
+        {heading ? (
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="font-handwritten text-base text-copper">
+              Traveler stories
+            </span>
+            <h2 className="mt-2 text-balance font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              Rated 4.9 by travelers across India
+            </h2>
+          </div>
+        ) : null}
 
-        <ul className="mt-10 grid gap-6 md:grid-cols-3">
+        <ul className={cn("grid gap-6 md:grid-cols-3", heading ? "mt-10" : "mt-0")}>
           {REVIEWS.map((r, i) => (
             <li
               key={r.id}

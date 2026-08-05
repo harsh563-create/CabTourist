@@ -9,6 +9,7 @@ import {
 } from "lucide-react"
 
 import { FEATURES } from "@/lib/cabtourist-data"
+import { cn } from "@/lib/utils"
 
 const ICONS: Record<string, LucideIcon> = {
   "shield-check": ShieldCheck,
@@ -19,23 +20,25 @@ const ICONS: Record<string, LucideIcon> = {
   "calendar-check": CalendarCheck,
 }
 
-export function WhyChooseUs() {
+export function WhyChooseUs({ heading = true }: { heading?: boolean }) {
   return (
     <section id="why" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-20">
-      <div className="mx-auto max-w-2xl text-center">
-        <span className="font-handwritten text-base text-copper">
-          Why travelers choose CabTourist
-        </span>
-        <h2 className="mt-2 text-balance font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-          Built for safe, stress-free travel
-        </h2>
-        <p className="mt-3 text-pretty text-muted-foreground">
-          Everything you need for a dependable ride — from the first tap to the
-          final drop-off.
-        </p>
-      </div>
+      {heading ? (
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="font-handwritten text-base text-copper">
+            Why travelers choose CabTourist
+          </span>
+          <h2 className="mt-2 text-balance font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            Built for safe, stress-free travel
+          </h2>
+          <p className="mt-3 text-pretty text-muted-foreground">
+            Everything you need for a dependable ride — from the first tap to the
+            final drop-off.
+          </p>
+        </div>
+      ) : null}
 
-      <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className={cn("grid gap-4 sm:grid-cols-2 lg:grid-cols-3", heading ? "mt-10" : "mt-0")}>
         {FEATURES.map((f) => {
           const Icon = ICONS[f.icon] ?? ShieldCheck
           return (
