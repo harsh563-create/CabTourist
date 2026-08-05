@@ -7,6 +7,9 @@ import { Menu, Phone, X, CalendarCheck } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { useUser } from "@/lib/use-user"
+import { UserMenu } from "@/components/auth/user-menu"
+import { UserMenuMobile } from "@/components/auth/user-menu-mobile"
 
 const NAV = [
   { label: "Routes", href: "/routes" },
@@ -20,6 +23,7 @@ const NAV = [
 export function SiteHeader() {
   const [open, setOpen] = React.useState(false)
   const [scrolled, setScrolled] = React.useState(false)
+  const user = useUser()
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -75,12 +79,20 @@ export function SiteHeader() {
             <CalendarCheck className="size-4" />
             Book Now
           </Link>
-          <Link
-            href="/login"
-            className="hidden items-center gap-1.5 rounded-lg border-2 border-copper bg-card/70 px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-secondary sm:inline-flex"
-          >
-            Sign In
-          </Link>
+          {user ? (
+            <UserMenu
+              name={user.name}
+              email={user.email}
+              onNavigate={() => setOpen(false)}
+            />
+          ) : (
+            <Link
+              href="/login"
+              className="hidden items-center gap-1.5 rounded-lg border-2 border-copper bg-card/70 px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-secondary sm:inline-flex"
+            >
+              Sign In
+            </Link>
+          )}
           <Button
             variant="outline"
             size="icon"
@@ -115,13 +127,21 @@ export function SiteHeader() {
               <CalendarCheck className="size-4" />
               Book Now
             </Link>
-            <Link
-              href="/login"
-              onClick={() => setOpen(false)}
-              className="mt-2 flex items-center justify-center gap-1.5 rounded-lg border-2 border-copper bg-card/70 px-4 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-secondary"
-            >
-              Sign in
-            </Link>
+            {user ? (
+              <UserMenuMobile
+                name={user.name}
+                email={user.email}
+                onNavigate={() => setOpen(false)}
+              />
+            ) : (
+              <Link
+                href="/login"
+                onClick={() => setOpen(false)}
+                className="mt-2 flex items-center justify-center gap-1.5 rounded-lg border-2 border-copper bg-card/70 px-4 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-secondary"
+              >
+                Sign in
+              </Link>
+            )}
           </nav>
         </div>
       ) : null}

@@ -8,7 +8,9 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
+import { apiFetch } from "@/lib/api"
+import { setUserSession, type AuthSession } from "@/lib/user-auth"
+import { getGoogleProfile } from "@/lib/google"
 
 type AuthMode = "email" | "phone"
 
@@ -30,6 +32,7 @@ export function AuthForm({ mode, className }: AuthFormProps) {
   const [email, setEmail] = React.useState("")
   const [password, setPassword] = React.useState("")
   const [name, setName] = React.useState("")
+  const [error, setError] = React.useState("")
   const [otpError, setOtpError] = React.useState("")
   const otpRefs = React.useRef<(HTMLInputElement | null)[]>([])
 
@@ -41,31 +44,70 @@ export function AuthForm({ mode, className }: AuthFormProps) {
     return () => clearTimeout(timer)
   }, [otpCountdown])
 
+  const completeAuth = (session: AuthSession) => {
+    setUserSession(session.token, session.user)
+    router.push(session.user.role === "admin" ? "/admin" : "/")
+  }
+
   const handleGoogleLogin = async () => {
     setLoading(true)
-    await new Promise((r) => setTimeout(r, 1500))
-    setLoading(false)
-    router.push("/")
+    setError("")
+    try {
+      const profile = await getGoogleProfile()
+      const session = await apiFetch<AuthSession>("/api/auth/google", {
+        method: "POST",
+        body: JSON.stringify(profile),
+      })
+      completeAuth(session)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Google sign-in failed")
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    await new Promise((r) => setTimeout(r, 1200))
-    setLoading(false)
-    router.push("/")
+    setError("")
+    try {
+      const session = await apiFetch<AuthSession>(
+        isSignup ? "/api/auth/register" : "/api/auth/login",
+        {
+          method: "POST",
+          body: JSON.stringify({ name, email, password }),
+        }
+      )
+      completeAuth(session)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong")
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleSendOtp = async () => {
     if (phone.length < 10) return
     setLoading(true)
-    await new Promise((r) => setTimeout(r, 1000))
-    setLoading(false)
-    setOtpSent(true)
-    setOtpCountdown(30)
-    setOtp(["", "", "", "", "", ""])
-    setOtpError("")
-    setTimeout(() => otpRefs.current[0]?.focus(), 100)
+    setError("")
+    try {
+      await apiFetch<{ expiresInMinutes: number }>("/api/auth/send-otp", {
+        method: "POST",
+        body: JSON.stringify({
+          phone,
+          ...(isSignup ? { name } : {}),
+        }),
+      })
+      setOtpSent(true)
+      setOtpCountdown(30)
+      setOtp(["", "", "", "", "", ""])
+      setOtpError("")
+      setTimeout(() => otpRefs.current[0]?.focus(), 100)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to send OTP")
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleOtpChange = (index: number, value: string) => {
@@ -106,16 +148,23 @@ export function AuthForm({ mode, className }: AuthFormProps) {
   const verifyOtp = async (code: string) => {
     setLoading(true)
     setOtpError("")
-    await new Promise((r) => setTimeout(r, 1200))
-    setLoading(false)
-    if (code === "123456" || code.length === 6) {
+    try {
+      const session = await apiFetch<AuthSession>("/api/auth/verify-otp", {
+        method: "POST",
+        body: JSON.stringify({
+          phone,
+          otp: code,
+          ...(isSignup ? { name } : {}),
+        }),
+      })
       setOtpVerified(true)
-      await new Promise((r) => setTimeout(r, 800))
-      router.push("/")
-    } else {
-      setOtpError("Invalid OTP. Please try again.")
+      completeAuth(session)
+    } catch (err) {
+      setOtpError(err instanceof Error ? err.message : "Invalid OTP. Please try again.")
       setOtp(["", "", "", "", "", ""])
       otpRefs.current[0]?.focus()
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -180,6 +229,7 @@ export function AuthForm({ mode, className }: AuthFormProps) {
               setOtpSent(false)
               setOtpVerified(false)
               setOtpError("")
+              setError("")
             }}
             className={cn(
               "flex items-center justify-center gap-2 rounded-md px-3 py-2 font-sans text-sm font-medium transition-all",
@@ -197,6 +247,7 @@ export function AuthForm({ mode, className }: AuthFormProps) {
               setOtpSent(false)
               setOtpVerified(false)
               setOtpError("")
+              setError("")
             }}
             className={cn(
               "flex items-center justify-center gap-2 rounded-md px-3 py-2 font-sans text-sm font-medium transition-all",
@@ -270,6 +321,15 @@ export function AuthForm({ mode, className }: AuthFormProps) {
               </div>
             )}
 
+            {error && (
+              <p
+                role="alert"
+                className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 font-sans text-xs text-destructive"
+              >
+                {error}
+              </p>
+            )}
+
             <Button type="submit" className="h-11 w-full rounded-md bg-leather font-sans text-base text-primary-foreground hover:bg-leather/90" disabled={loading}>
               {loading && <Loader2 className="size-4 animate-spin" />}
               {isSignup ? "Create account" : "Sign in"}
@@ -318,6 +378,14 @@ export function AuthForm({ mode, className }: AuthFormProps) {
                     />
                   </div>
                 </div>
+                {error && (
+                  <p
+                    role="alert"
+                    className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 font-sans text-xs text-destructive"
+                  >
+                    {error}
+                  </p>
+                )}
                 <Button
                   onClick={handleSendOtp}
                   className="h-11 w-full rounded-md bg-leather font-sans text-base text-primary-foreground hover:bg-leather/90"
