@@ -1,124 +1,137 @@
-import Image from "next/image"
-import { Star, ShieldCheck, Users, MapPin, Gauge } from "lucide-react"
+"use client"
 
-import { STATS } from "@/lib/cabtourist-data"
+import * as React from "react"
+import Image from "next/image"
+import Link from "next/link"
+import { ArrowRight, Headphones, Phone, ShieldCheck, Star, Users } from "lucide-react"
+
+import { cn } from "@/lib/utils"
+import { HERO_SLIDES, TRUST_STATS } from "@/lib/cabtourist-data"
+import { CONTACTS } from "@/lib/site-config"
 import { BookingWidget } from "@/components/booking-widget"
 
+const STAT_ICONS = [Users, Star, Headphones]
+
 export function Hero() {
+  const [active, setActive] = React.useState(0)
+
+  React.useEffect(() => {
+    const id = window.setInterval(() => {
+      setActive((a) => (a + 1) % HERO_SLIDES.length)
+    }, 6000)
+    return () => window.clearInterval(id)
+  }, [])
+
   return (
-    <section id="top" className="relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 -z-10 bg-background" />
+    <section
+      id="top"
+      className="relative flex min-h-[100svh] items-center overflow-hidden bg-background"
+    >
+      {/* Slideshow background */}
+      <div className="absolute inset-0">
+        {HERO_SLIDES.map((slide, i) => (
+          <div
+            key={slide.image}
+            className={cn(
+              "absolute inset-0 transition-opacity duration-[1600ms] ease-in-out",
+              i === active ? "opacity-100" : "opacity-0",
+            )}
+            aria-hidden={i !== active}
+          >
+            <Image
+              src={slide.image}
+              alt={slide.alt}
+              fill
+              priority={i === 0}
+              sizes="100vw"
+              className="object-cover"
+            />
+          </div>
+        ))}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/25" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/40" />
+      </div>
 
-      <div className="mx-auto max-w-7xl px-4 pt-12 pb-12 sm:px-6 md:pt-16 md:pb-16 lg:pt-20">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          {/* Left Column - Main Content */}
-          <div className="lg:col-span-2">
-            {/* Vintage badge */}
-            <span className="inline-flex items-center gap-2 rounded-full border border-copper/30 bg-card px-3 py-1.5 text-xs font-medium text-foreground">
-              <ShieldCheck className="size-3.5 text-copper" />
-              Verified drivers · Transparent fares · 24/7 support
-            </span>
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 md:py-20">
+        {/* Cab Booking Widget — top left corner */}
+        <div className="w-full max-w-2xl">
+          <BookingWidget />
+        </div>
 
-            {/* Main heading */}
-            <h1 className="mt-4 text-balance font-display text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl leading-tight">
-              Every journey,{" "}
-              <span className="block text-copper">perfectly driven.</span>
-            </h1>
+        {/* Hero content — left side */}
+        <div className="mt-10 max-w-3xl md:mt-12">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur-md">
+            <ShieldCheck className="size-3.5 text-copper" />
+            Verified drivers · Transparent fares · 24/7 support
+          </span>
 
-            <p className="mt-4 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Book outstation cabs, airport transfers, and curated tour packages
-              with professional chauffeurs. Upfront pricing, live tracking, and
-              free cancellation on every ride.
-            </p>
+          <h1 className="mt-5 text-balance font-display text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
+            Explore India&apos;s Top Destinations with{" "}
+            <span className="text-copper">CabTourist</span>
+          </h1>
 
-            {/* Rating */}
-            <div className="mt-6 flex items-center gap-3 text-sm text-foreground">
-              <div className="flex items-center gap-0.5 text-cta">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="size-4 fill-current" />
-                ))}
-              </div>
-              <span className="font-display font-semibold text-lg">4.9/5</span>
-              <span className="text-muted-foreground">
-                from 120,000+ verified trips
-              </span>
-            </div>
+          <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-white/85 sm:text-lg">
+            Book Cabs for Temple Darshan, Airport Transfers, Outstation Trips,
+            and Travel Anywhere in India.
+          </p>
 
-            {/* Booking widget */}
-            <div className="mt-10">
-              <BookingWidget />
-            </div>
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+            <Link
+              href="/book"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-cta px-7 py-3 font-sans text-base font-bold text-cta-foreground shadow-lg transition-all hover:scale-[1.02] hover:bg-cta/90"
+            >
+              Book a Cab Now <ArrowRight className="size-4" />
+            </Link>
+            <a
+              href={CONTACTS.phone1Href}
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 bg-white/10 px-7 py-3 font-sans text-base font-semibold text-white backdrop-blur-md transition-all hover:scale-[1.02] hover:bg-white/20"
+            >
+              <Phone className="size-4" /> {CONTACTS.phone1Display}
+            </a>
           </div>
 
-          {/* Right Column - Stats and Featured Packages */}
-          <div className="lg:col-span-1">
-            {/* Stats Cards */}
-            <div className="space-y-3">
-              {STATS.map((stat, idx) => (
+          {/* Trust statistics */}
+          <div className="mt-8 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
+            {TRUST_STATS.map((stat, i) => {
+              const Icon = STAT_ICONS[i]
+              return (
                 <div
                   key={stat.label}
-                  className="rounded-lg border border-border/70 bg-card p-4 text-center shadow-sm"
+                  className="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/10 px-4 py-3.5 backdrop-blur-md transition-transform hover:-translate-y-0.5"
                 >
-                  <div className="font-display text-2xl font-bold text-copper">
-                    {stat.value}
-                  </div>
-                  <div className="mt-1 text-sm font-medium text-muted-foreground capitalize">
-                    {stat.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Featured Packages Section */}
-            <div className="mt-8">
-              <h3 className="text-lg font-bold text-foreground mb-4">Featured Packages</h3>
-              <div className="relative rounded-lg border-2 border-border bg-card p-4">
-                {/* Cork board effect */}
-                <div className="absolute -top-2 left-1/3 w-4 h-4 rounded-full bg-amber-900 shadow-md" />
-                <div className="absolute -top-2 right-1/4 w-4 h-4 rounded-full bg-amber-900 shadow-md" />
-
-                {/* Package cards */}
-                <div className="space-y-3">
-                  <div className="bg-background rounded p-3 text-center border border-dashed border-border">
-                    <div className="text-xs font-semibold text-copper mb-1">Curated Trip</div>
-                    <div className="text-sm font-bold text-foreground">Rajasthan Hills</div>
-                    <div className="text-xs text-muted-foreground mt-1">3 Days</div>
-                  </div>
-                  <div className="bg-background rounded p-3 text-center border border-dashed border-border">
-                    <div className="text-xs font-semibold text-copper mb-1">Curated Trip</div>
-                    <div className="text-sm font-bold text-foreground">Kerala Backwaters</div>
-                    <div className="text-xs text-muted-foreground mt-1">4 Days</div>
-                  </div>
-                  <div className="bg-background rounded p-3 text-center border border-dashed border-border">
-                    <div className="text-xs font-semibold text-copper mb-1">Curated Trip</div>
-                    <div className="text-sm font-bold text-foreground">Leh Adventure</div>
-                    <div className="text-xs text-muted-foreground mt-1">5 Days</div>
+                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-cta/90 text-cta-foreground shadow-md">
+                    <Icon className="size-5" />
+                  </span>
+                  <div>
+                    <div className="font-display text-xl font-bold text-white">
+                      {stat.value}
+                    </div>
+                    <div className="text-xs font-medium text-white/80">
+                      {stat.label}
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              {/* Service Icons */}
-              {/* <div className="mt-6 grid grid-cols-2 gap-3">
-                <div className="text-center p-3 rounded-lg bg-muted/50">
-                  <Users className="size-6 mx-auto text-copper mb-1" />
-                  <p className="text-xs font-medium text-muted-foreground">2M+<br/>Travelers</p>
-                </div>
-                <div className="text-center p-3 rounded-lg bg-muted/50">
-                  <MapPin className="size-6 mx-auto text-copper mb-1" />
-                  <p className="text-xs font-medium text-muted-foreground">450+<br/>Cities</p>
-                </div>
-                <div className="text-center p-3 rounded-lg bg-muted/50">
-                  <Gauge className="size-6 mx-auto text-copper mb-1" />
-                  <p className="text-xs font-medium text-muted-foreground">11K+<br/>Drivers</p>
-                </div>
-                <div className="text-center p-3 rounded-lg bg-muted/50">
-                  <Star className="size-6 mx-auto text-copper mb-1" />
-                  <p className="text-xs font-medium text-muted-foreground">4.9<br/>Rating</p>
-                </div>
-              </div> */}
-            </div>
+              )
+            })}
           </div>
+        </div>
+
+        {/* Slide indicators */}
+        <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-2">
+          {HERO_SLIDES.map((slide, i) => (
+            <button
+              key={slide.image}
+              type="button"
+              aria-label={`Show slide ${i + 1}`}
+              onClick={() => setActive(i)}
+              className={cn(
+                "h-1.5 rounded-full transition-all duration-300",
+                i === active
+                  ? "w-8 bg-copper"
+                  : "w-2.5 bg-white/50 hover:bg-white/80",
+              )}
+            />
+          ))}
         </div>
       </div>
     </section>

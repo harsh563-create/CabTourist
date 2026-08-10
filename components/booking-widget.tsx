@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import * as React from "react"
 import {
@@ -278,7 +278,7 @@ export function BookingWidget({ className }: { className?: string }) {
             <span className="font-semibold text-foreground">
               {distanceKm} km
             </span>{" "}
-            · fares shown before booking · free cancellation
+            Â· fares shown before booking Â· free cancellation
           </p>
           <Button
             type="submit"
@@ -299,12 +299,12 @@ export function BookingWidget({ className }: { className?: string }) {
               {dialogTitle}
             </DialogTitle>
             <DialogDescription>
-              {from} → {to} · {distanceKm} km ·{" "}
+              {from} â†’ {to} Â· {distanceKm} km Â·{" "}
               {new Date(date).toLocaleDateString("en-IN", {
                 day: "numeric",
                 month: "short",
               })}{" "}
-              · {isRoundTrip ? "Round trip" : "One way"}
+              Â· {isRoundTrip ? "Round trip" : "One way"}
             </DialogDescription>
           </DialogHeader>
 
@@ -320,7 +320,7 @@ export function BookingWidget({ className }: { className?: string }) {
                       className="flex w-full items-center gap-4 p-4 text-left transition-colors hover:bg-muted/60"
                     >
                       <div className="flex size-12 shrink-0 items-center justify-center rounded-lg border border-copper/20 bg-copper/10 text-copper">
-                        <CabGlyph id={cab.id} />
+                        <CabGlyph />
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="font-sans font-semibold text-foreground">
@@ -361,7 +361,7 @@ export function BookingWidget({ className }: { className?: string }) {
               <div className="mb-4 flex items-center justify-between rounded-lg border border-border bg-muted/40 p-3">
                 <div className="flex items-center gap-2 text-sm">
                   <span className="flex size-9 items-center justify-center rounded-lg border border-copper/20 bg-copper/10 text-copper">
-                    <CabGlyph id={selectedCab.id} />
+                    <CabGlyph />
                   </span>
                   <span className="font-sans font-medium text-foreground">
                     {selectedCab.name}
@@ -440,7 +440,7 @@ export function BookingWidget({ className }: { className?: string }) {
                   {submitting ? (
                     <>
                       <Loader2 className="size-4 animate-spin" />
-                      Confirming…
+                      Confirmingâ€¦
                     </>
                   ) : (
                     <>Confirm booking</>
@@ -467,7 +467,7 @@ export function BookingWidget({ className }: { className?: string }) {
               </p>
 
               <div className="mt-5 grid gap-2 rounded-lg border border-border bg-muted/40 p-4 text-left text-sm">
-                <Row label="Route" value={`${from} → ${to}`} />
+                <Row label="Route" value={`${from} â†’ ${to}`} />
                 <Row label="Cab" value={selectedCab.name} />
                 <Row
                   label="Pickup"
@@ -553,7 +553,7 @@ function Row({
   )
 }
 
-function CabGlyph({ id }: { id: string }) {
+function CabGlyph() {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -570,7 +570,6 @@ function CabGlyph({ id }: { id: string }) {
       <path d="M6 18H4a1 1 0 0 1-1-1v-3" />
       <circle cx="7.5" cy="17.5" r="1.6" />
       <circle cx="16.5" cy="17.5" r="1.6" />
-      {id === "premium" ? <path d="M9.5 17.5h5" /> : null}
     </svg>
   )
 }

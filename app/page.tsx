@@ -1,5 +1,6 @@
 import { SiteHeader } from "@/components/site-header"
 import { Hero } from "@/components/hero"
+import { CabAvailable } from "@/components/cab-available"
 import { PopularDestinations } from "@/components/popular-destinations"
 import { PopularRoutes } from "@/components/popular-routes"
 import { TourPackages } from "@/components/tour-packages"
@@ -17,13 +18,14 @@ export default function HomePage() {
       <SiteHeader />
       <main className="flex-1">
         <Hero />
+        <CabAvailable />
         <PopularDestinations />
         <PopularRoutes />
         <TourPackages />
         <WhyChooseUs />
         <Reviews />
         <FaqSection />
-        {/* <ContactSection /> */}
+        <ContactSection />
         <CtaBand />
       </main>
       <SiteFooter />

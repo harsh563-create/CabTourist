@@ -7,6 +7,8 @@ export type CabType = {
   perKm: number
   baseFare: number
   eta: string
+  ac: boolean
+  image: string
 }
 
 export type Route = {
@@ -81,6 +83,8 @@ export const CAB_TYPES: CabType[] = [
     perKm: 11,
     baseFare: 250,
     eta: '4 min',
+    ac: true,
+    image: '/images/car-hatchback.jpg',
   },
   {
     id: 'sedan',
@@ -91,6 +95,20 @@ export const CAB_TYPES: CabType[] = [
     perKm: 14,
     baseFare: 350,
     eta: '5 min',
+    ac: true,
+    image: '/images/car-sedan.jpg',
+  },
+  {
+    id: 'ertiga',
+    name: 'Ertiga',
+    description: 'Spacious MPV ideal for groups',
+    seats: 6,
+    bags: 4,
+    perKm: 16,
+    baseFare: 450,
+    eta: '6 min',
+    ac: true,
+    image: '/images/car-ertiga.jpg',
   },
   {
     id: 'suv',
@@ -101,16 +119,20 @@ export const CAB_TYPES: CabType[] = [
     perKm: 18,
     baseFare: 500,
     eta: '7 min',
+    ac: true,
+    image: '/images/car-suv.jpg',
   },
   {
-    id: 'premium',
-    name: 'Premium',
-    description: 'Luxury sedans with pro chauffeurs',
-    seats: 4,
-    bags: 3,
-    perKm: 26,
-    baseFare: 900,
-    eta: '9 min',
+    id: 'innova',
+    name: 'Innova Crysta',
+    description: 'Premium MPV for family & outstation',
+    seats: 7,
+    bags: 5,
+    perKm: 22,
+    baseFare: 700,
+    eta: '8 min',
+    ac: true,
+    image: '/images/car-innova.jpg',
   },
 ]
 
@@ -275,4 +297,34 @@ export const STATS = [
   { value: '450+', label: 'Cities covered' },
   { value: '12K+', label: 'Verified drivers' },
   { value: '4.9', label: 'Average rating' },
+]
+
+export const TRUST_STATS = [
+  { value: '50K+', label: 'Happy Customers' },
+  { value: '4.9★', label: 'Google Rating' },
+  { value: '24×7', label: 'Customer Support' },
+]
+
+export const HERO_SLIDES = [
+  {
+    image: '/images/hero-mahakal-1.jpg',
+    alt: 'Mahakaleshwar Temple, Ujjain',
+  },
+  {
+    image: '/images/hero-mahakal-2.jpg',
+    alt: 'Shri Mahakaleshwar Temple Ujjain',
+  },
+  {
+    image: '/images/hero-mahakal-3.jpg',
+    alt: 'Mahakaleshwar Temple, Ujjain darshan',
+  },
+]
+
+export const UJJAIN_SIGHTS = [
+  { name: 'Mahakaleshwar Temple', detail: 'One of the 12 Jyotirlingas' },
+  { name: 'Kumbh Mela Ghat', detail: 'Holy banks of river Shipra' },
+  { name: 'Bade Ganeshji Ka Mandir', detail: 'Revered Ganesh shrine' },
+  { name: 'Kal Bhairav Temple', detail: 'Guardian deity of Ujjain' },
+  { name: 'Ram Ghat', detail: 'Sacred evening aarti' },
+  { name: 'Sandipani Ashram', detail: 'Ancient guru-shishya heritage' },
 ]

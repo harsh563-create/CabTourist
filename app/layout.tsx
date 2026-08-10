@@ -23,19 +23,29 @@ const caveat = Caveat({
 })
 
 export const metadata: Metadata = {
-  title: 'CabTourist — Vintage Cabs & Guided Tour Packages',
+  metadataBase: new URL('https://cabtourist.com'),
+  title: 'CabTourist — Explore India\'s Top Destinations | Cab Booking, Taxi & Tour Packages',
   description:
-    'Book reliable outstation cabs, airport transfers, and curated tour packages with verified drivers, transparent pricing, and 24/7 support. Travel smarter with CabTourist.',
+    'Book cabs for temple darshan, airport transfers, outstation trips, and travel anywhere in India. Hatchback, Sedan, Ertiga, SUV & Innova Crysta with verified drivers, transparent fares, and 24/7 support.',
   keywords: [
     'cab booking',
     'taxi service',
     'outstation cabs',
     'airport transfer',
     'tour packages',
+    'temple darshan',
+    'Mahakaleshwar Ujjain',
+    'Ujjain taxi',
     'road trips',
     'CabTourist',
   ],
-  generator: 'v0.app',
+  openGraph: {
+    title: 'CabTourist — Explore India\'s Top Destinations',
+    description:
+      'Book cabs for temple darshan, airport transfers, outstation trips, and travel anywhere in India with verified drivers and 24/7 support.',
+    type: 'website',
+  },
+  generator: 'CabTourist',
 }
 
 export const viewport: Viewport = {

@@ -1,23 +1,37 @@
 import { Mail, MapPin, Phone, Compass } from "lucide-react"
 
+import { CONTACTS, SITE } from "@/lib/site-config"
+
 const COLUMNS = [
   {
     title: "Company",
-    links: ["About us", "Careers", "Press", "Partners", "Blog"],
+    links: [
+      { label: "About us", href: "/about" },
+      { label: "Our Taxi", href: "/our-taxi" },
+      { label: "Hotel", href: "/hotel" },
+      { label: "Pujan", href: "/pujan" },
+      { label: "Blog", href: "/about" },
+    ],
   },
   {
     title: "Services",
     links: [
-      "Outstation cabs",
-      "Airport transfers",
-      "Hourly rentals",
-      "Tour packages",
-      "Corporate travel",
+      { label: "Outstation cabs", href: "/book" },
+      { label: "Airport transfers", href: "/book" },
+      { label: "Hourly rentals", href: "/book" },
+      { label: "Tour packages", href: "/packages" },
+      { label: "Pujan & darshan", href: "/pujan" },
     ],
   },
   {
     title: "Support",
-    links: ["Help center", "Cancellation policy", "Terms of service", "Privacy policy", "Contact"],
+    links: [
+      { label: "Help center", href: "/faq" },
+      { label: "Cancellation policy", href: "/faq" },
+      { label: "Terms of service", href: "/faq" },
+      { label: "Privacy policy", href: "/faq" },
+      { label: "Contact", href: "/contact" },
+    ],
   },
 ]
 
@@ -36,18 +50,28 @@ export function SiteFooter() {
               </span>
             </div>
             <p className="mt-4 max-w-xs font-sans text-sm leading-relaxed text-muted-foreground">
-              Premium cabs and curated tour packages with verified drivers,
-              transparent fares, and round-the-clock support.
+              Premium cabs, hotels and temple darshan packages with verified
+              drivers, transparent fares, and round-the-clock support.
             </p>
             <ul className="mt-5 space-y-2 font-sans text-sm text-muted-foreground">
               <li className="flex items-center gap-2">
-                <Phone className="size-4 text-copper" /> 1800-000-000
+                <Phone className="size-4 text-copper" />
+                <a href={CONTACTS.phone1Href} className="transition-colors hover:text-copper">
+                  {CONTACTS.phone1Display}
+                </a>
+                <span aria-hidden="true">·</span>
+                <a href={CONTACTS.phone2Href} className="transition-colors hover:text-copper">
+                  {CONTACTS.phone2Display}
+                </a>
               </li>
               <li className="flex items-center gap-2">
-                <Mail className="size-4 text-copper" /> hello@cabtourist.com
+                <Mail className="size-4 text-copper" />
+                <a href={`mailto:${SITE.email}`} className="transition-colors hover:text-copper">
+                  {SITE.email}
+                </a>
               </li>
               <li className="flex items-center gap-2">
-                <MapPin className="size-4 text-copper" /> Bengaluru, India
+                <MapPin className="size-4 text-copper" /> {SITE.address}
               </li>
             </ul>
           </div>
@@ -59,12 +83,12 @@ export function SiteFooter() {
               </h3>
               <ul className="mt-4 space-y-2.5">
                 {col.links.map((link) => (
-                  <li key={link}>
+                  <li key={link.label}>
                     <a
-                      href="#"
+                      href={link.href}
                       className="font-sans text-sm text-muted-foreground transition-colors hover:text-copper"
                     >
-                      {link}
+                      {link.label}
                     </a>
                   </li>
                 ))}
