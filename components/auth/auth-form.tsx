@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { apiFetch } from "@/lib/api"
 import { setUserSession, type AuthSession } from "@/lib/user-auth"
+import { collectClientMeta, type ClientMeta } from "@/lib/client-meta"
 import { getGoogleProfile } from "@/lib/google"
 
 type AuthMode = "email" | "phone"
@@ -35,8 +36,15 @@ export function AuthForm({ mode, className }: AuthFormProps) {
   const [error, setError] = React.useState("")
   const [otpError, setOtpError] = React.useState("")
   const otpRefs = React.useRef<(HTMLInputElement | null)[]>([])
+  const clientMetaRef = React.useRef<ClientMeta | null>(null)
 
   const isSignup = mode === "signup"
+
+  React.useEffect(() => {
+    collectClientMeta().then((meta) => {
+      clientMetaRef.current = meta
+    })
+  }, [])
 
   React.useEffect(() => {
     if (otpCountdown <= 0) return
@@ -56,7 +64,10 @@ export function AuthForm({ mode, className }: AuthFormProps) {
       const profile = await getGoogleProfile()
       const session = await apiFetch<AuthSession>("/api/auth/google", {
         method: "POST",
-        body: JSON.stringify(profile),
+        body: JSON.stringify({
+          ...profile,
+          clientMeta: clientMetaRef.current ?? undefined,
+        }),
       })
       completeAuth(session)
     } catch (err) {
@@ -75,7 +86,12 @@ export function AuthForm({ mode, className }: AuthFormProps) {
         isSignup ? "/api/auth/register" : "/api/auth/login",
         {
           method: "POST",
-          body: JSON.stringify({ name, email, password }),
+          body: JSON.stringify({
+            name,
+            email,
+            password,
+            clientMeta: clientMetaRef.current ?? undefined,
+          }),
         }
       )
       completeAuth(session)
@@ -155,6 +171,7 @@ export function AuthForm({ mode, className }: AuthFormProps) {
           phone,
           otp: code,
           ...(isSignup ? { name } : {}),
+          clientMeta: clientMetaRef.current ?? undefined,
         }),
       })
       setOtpVerified(true)
