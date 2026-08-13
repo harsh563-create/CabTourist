@@ -27,12 +27,16 @@ export function RequireUser({ children }: { children: React.ReactNode }) {
     }
   }, [user, router])
 
-  if (user === null) {
+  if (user === undefined) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
         <Loader2 className="size-6 animate-spin text-copper" />
       </div>
     )
+  }
+
+  if (user === null) {
+    return null
   }
 
   return (

@@ -7,8 +7,8 @@ import {
   type AuthUser,
 } from "@/lib/user-auth"
 
-export function useUser(): AuthUser | null {
-  const [user, setUser] = React.useState<AuthUser | null>(null)
+export function useUser(): AuthUser | null | undefined {
+  const [user, setUser] = React.useState<AuthUser | null | undefined>(undefined)
 
   React.useEffect(() => {
     setUser(getUser())

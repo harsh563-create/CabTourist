@@ -8,6 +8,7 @@ import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuItem,
   DropdownMenuSeparator,
@@ -54,18 +55,20 @@ export function UserMenu({
         <ChevronDown className="size-3.5 text-muted-foreground" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-60">
-        <DropdownMenuLabel className="px-2.5 py-2">
-          <div className="flex flex-col items-start gap-0.5">
-            <span className="truncate text-sm font-semibold text-foreground">
-              {name}
-            </span>
-            {email && (
-              <span className="truncate text-xs font-normal text-muted-foreground">
-                {email}
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="px-2.5 py-2">
+            <div className="flex flex-col items-start gap-0.5">
+              <span className="truncate text-sm font-semibold text-foreground">
+                {name}
               </span>
-            )}
-          </div>
-        </DropdownMenuLabel>
+              {email && (
+                <span className="truncate text-xs font-normal text-muted-foreground">
+                  {email}
+                </span>
+              )}
+            </div>
+          </DropdownMenuLabel>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => go("/bookings")}
