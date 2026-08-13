@@ -18,6 +18,7 @@ const NAV = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
   { label: "Our Taxi", href: "/our-taxi" },
+  { label: "Vendors", href: "/vendors" },
   { label: "Hotel", href: "/hotel" },
   { label: "Pujan", href: "/pujan" },
   { label: "Tour Packages", href: "/packages" },
