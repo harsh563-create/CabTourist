@@ -1,9 +1,10 @@
 import Image from "next/image"
 import Link from "next/link"
-import { Check, MapPin, Star, Map } from "lucide-react"
+import { Check, MapPin, Star } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { TOUR_PACKAGES } from "@/lib/cabtourist-data"
+import { Button } from "@/components/ui/button"
 
 const inr = new Intl.NumberFormat("en-IN", {
   style: "currency",
@@ -22,19 +23,19 @@ export function TourPackages({ heading = true }: { heading?: boolean }) {
           {heading ? (
             <div className="mx-auto max-w-2xl text-center">
               <span className="font-handwritten text-base text-copper">
-                Curated tour packages
+                Ujjain taxi packages
               </span>
               <h2 className="mt-2 text-balance font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                Ready-to-go trips with cabs included
+                Temples & trips from Ujjain, on your schedule
               </h2>
               <p className="mt-3 text-pretty text-muted-foreground">
-                Multi-day getaways with private chauffeurs, handpicked stays, and
-                local guides. Just pack and go.
+                Book a private AC cab for darshan circuits, airport transfers,
+                and outstation trips. Transparent fares, verified drivers.
               </p>
             </div>
           ) : null}
 
-          <ul className={cn("grid gap-8 md:grid-cols-3", heading ? "mt-10" : "mt-0")}>
+          <ul className={cn("grid gap-8 sm:grid-cols-2 lg:grid-cols-3", heading ? "mt-10" : "mt-0")}>
             {TOUR_PACKAGES.map((pkg, i) => (
               <li
                 key={pkg.id}
@@ -79,7 +80,9 @@ export function TourPackages({ heading = true }: { heading?: boolean }) {
                     {pkg.title}
                   </h3>
                   <p className="mt-0.5 font-sans text-sm text-muted-foreground">
-                    {pkg.days} days · {pkg.nights} nights · {pkg.reviews} reviews
+                    {pkg.days} day{pkg.days > 1 ? "s" : ""}
+                    {pkg.nights > 0 ? ` · ${pkg.nights} nights` : ""} ·{" "}
+                    {pkg.reviews} reviews
                   </p>
 
                   <ul className="mt-4 space-y-2">
@@ -94,22 +97,35 @@ export function TourPackages({ heading = true }: { heading?: boolean }) {
                     ))}
                   </ul>
 
-                  <div className="mt-5 flex items-end justify-between border-t border-border/60 pt-4">
-                    <div>
+                  <div className="mt-5 flex flex-col gap-2.5 border-t border-border/60 pt-4">
+                    <div className="flex items-end justify-between">
+                      <div>
+                        <span className="font-sans text-xs text-muted-foreground">
+                          Starting from
+                        </span>
+                        <p className="font-display text-2xl font-bold text-copper">
+                          {inr.format(pkg.fromPrice)}
+                        </p>
+                      </div>
                       <span className="font-sans text-xs text-muted-foreground">
-                        From / person
+                        per cab
                       </span>
-                      <p className="font-display text-2xl font-bold text-copper">
-                        {inr.format(pkg.fromPrice)}
-                      </p>
                     </div>
-                    <Link
-                      href="/book"
-                      className="inline-flex items-center justify-center rounded-md bg-leather px-3.5 py-1.5 font-sans text-sm font-medium text-primary-foreground shadow-sm transition-all hover:bg-leather/90"
-                    >
-                      <Map className="size-3.5 mr-1.5" />
-                      View package
-                    </Link>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button
+                        render={<Link href="/packages" />}
+                        variant="outline"
+                        className="h-9 font-sans text-sm"
+                      >
+                        View Package
+                      </Button>
+                      <Button
+                        render={<Link href="/book" />}
+                        className="h-9 bg-leather font-sans text-sm font-semibold text-primary-foreground hover:bg-leather/90"
+                      >
+                        Book Now
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </li>

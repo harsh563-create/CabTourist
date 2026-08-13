@@ -10,9 +10,9 @@ export default function PackagesPage() {
       <SiteHeader />
       <main className="flex-1">
         <PageHero
-          eyebrow="Curated tour packages"
-          title="Ready-to-go trips with cabs included"
-          description="Multi-day getaways with private chauffeurs, handpicked stays, and local guides. Just pack and go."
+          eyebrow="Ujjain taxi packages"
+          title="Temples & trips from Ujjain, on your schedule"
+          description="Book a private AC cab for darshan circuits, airport transfers, and outstation trips. Transparent fares, verified drivers."
         />
         <TourPackages heading={false} />
       </main>

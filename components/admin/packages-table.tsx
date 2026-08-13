@@ -8,6 +8,9 @@ import type { TourPackage } from "@/lib/cabtourist-data"
 
 const TAG_STYLES: Record<string, string> = {
   Bestseller: "bg-primary/15 text-primary",
+  Popular: "bg-cta/15 text-cta",
+  Pilgrimage: "bg-amber-500/15 text-amber-600",
+  Airport: "bg-sky-500/15 text-sky-600",
   Heritage: "bg-cta/15 text-cta",
   Weekend: "bg-emerald-500/15 text-emerald-500",
 }
