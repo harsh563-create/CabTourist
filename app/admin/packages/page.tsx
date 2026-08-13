@@ -1,7 +1,7 @@
 "use client"
 
-import { useMemo, useState } from "react"
-import { Plus, Search } from "lucide-react"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { Plus, Search, AlertTriangle, Loader2, RefreshCw, MapPin } from "lucide-react"
 
 import { AdminTopbar } from "@/components/admin/admin-topbar"
 import { PackagesTable } from "@/components/admin/packages-table"
@@ -16,18 +16,43 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
-import { TOUR_PACKAGES, type TourPackage } from "@/lib/cabtourist-data"
+import type { TourPackage } from "@/lib/cabtourist-data"
+import {
+  createPackage,
+  deletePackage,
+  fetchPackages,
+  updatePackage,
+} from "@/lib/packages-api"
 
 const TAGS = ["All", "Bestseller", "Heritage", "Weekend"] as const
 type TagFilter = (typeof TAGS)[number]
 
 export default function PackagesPage() {
-  const [packages, setPackages] = useState<TourPackage[]>(TOUR_PACKAGES)
+  const [packages, setPackages] = useState<TourPackage[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState<TagFilter>("All")
   const [query, setQuery] = useState("")
   const [formOpen, setFormOpen] = useState(false)
   const [editing, setEditing] = useState<TourPackage | null>(null)
   const [deleting, setDeleting] = useState<TourPackage | null>(null)
+
+  const load = useCallback(async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const data = await fetchPackages()
+      setPackages(data)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load packages")
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    load()
+  }, [load])
 
   const filtered = useMemo(() => {
     return packages.filter((p) => {
@@ -52,24 +77,34 @@ export default function PackagesPage() {
     setFormOpen(true)
   }
 
-  const handleSave = (data: Omit<TourPackage, "id"> & { id?: string }) => {
-    if (data.id) {
-      setPackages((prev) =>
-        prev.map((p) =>
-          p.id === data.id ? ({ ...data, id: data.id } as TourPackage) : p
+  const handleSave = async (data: Omit<TourPackage, "id"> & { id?: string }) => {
+    try {
+      if (data.id) {
+        const { id, ...rest } = data
+        const updated = await updatePackage(id, rest)
+        setPackages((prev) =>
+          prev.map((p) => (p.id === updated.id ? updated : p))
         )
-      )
-    } else {
-      const id = `p${Date.now()}`
-      setPackages((prev) => [{ ...data, id } as TourPackage, ...prev])
+      } else {
+        const created = await createPackage(data)
+        setPackages((prev) => [created, ...prev])
+      }
+      setFormOpen(false)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to save package")
     }
-    setFormOpen(false)
   }
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!deleting) return
-    setPackages((prev) => prev.filter((p) => p.id !== deleting.id))
-    setDeleting(null)
+    try {
+      await deletePackage(deleting.id)
+      setPackages((prev) => prev.filter((p) => p.id !== deleting.id))
+      setDeleting(null)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to delete package")
+      setDeleting(null)
+    }
   }
 
   return (
@@ -96,6 +131,15 @@ export default function PackagesPage() {
                 aria-label="Search packages"
               />
             </div>
+            <Button
+              variant="outline"
+              onClick={load}
+              disabled={loading}
+              className="h-9 gap-2"
+            >
+              <RefreshCw className={cn("size-4", loading && "animate-spin")} />
+              Refresh
+            </Button>
             <Button
               onClick={openCreate}
               className="bg-leather font-semibold text-primary-foreground hover:bg-leather/90"
@@ -126,7 +170,29 @@ export default function PackagesPage() {
 
         <div className="paper-card rounded-lg border border-border bg-card">
           <div className="px-0 py-2 sm:px-2">
-            {filtered.length > 0 ? (
+            {loading ? (
+              <div className="flex flex-col items-center justify-center gap-3 py-16">
+                <Loader2 className="size-6 animate-spin text-copper" />
+                <p className="font-sans text-sm text-muted-foreground">
+                  Loading packages…
+                </p>
+              </div>
+            ) : error && packages.length === 0 ? (
+              <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
+                <AlertTriangle className="size-8 text-destructive" />
+                <div>
+                  <p className="font-sans text-sm font-semibold text-foreground">
+                    Could not load packages
+                  </p>
+                  <p className="mt-1 font-sans text-xs text-muted-foreground">
+                    {error}
+                  </p>
+                </div>
+                <Button variant="outline" size="sm" onClick={load}>
+                  Try again
+                </Button>
+              </div>
+            ) : filtered.length > 0 ? (
               <PackagesTable
                 packages={filtered}
                 onEdit={openEdit}
@@ -135,10 +201,20 @@ export default function PackagesPage() {
                 }
               />
             ) : (
-              <p className="py-12 text-center font-sans text-sm text-muted-foreground">
-                No packages match your filters.
-              </p>
+              <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
+                <MapPin className="size-8 text-muted-foreground" />
+                <p className="font-sans text-sm text-muted-foreground">
+                  {packages.length === 0
+                    ? "No packages yet. Add your first tour package to get started."
+                    : "No packages match your filters."}
+                </p>
+              </div>
             )}
+            {error && packages.length > 0 ? (
+              <p className="border-t border-border/60 px-4 py-3 text-center font-sans text-xs text-destructive">
+                {error}
+              </p>
+            ) : null}
           </div>
         </div>
       </main>

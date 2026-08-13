@@ -52,15 +52,18 @@ export function deviceLabel(device: AdminDevice): string {
 }
 
 export async function adminFetch<T = unknown>(
-  path: string
+  path: string,
+  options: RequestInit = {}
 ): Promise<T> {
   const token = getAdminToken()
   if (!token) throw new Error("Admin session not found")
 
   const res = await fetch(`${API_BASE_URL}${path}`, {
+    ...options,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+      ...(options.headers ?? {}),
     },
   })
 

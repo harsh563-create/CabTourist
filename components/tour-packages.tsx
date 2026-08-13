@@ -1,9 +1,13 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Check, MapPin, Star } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { TOUR_PACKAGES } from "@/lib/cabtourist-data"
+import { TOUR_PACKAGES, type TourPackage } from "@/lib/cabtourist-data"
+import { fetchPackages } from "@/lib/packages-api"
 import { Button } from "@/components/ui/button"
 
 const inr = new Intl.NumberFormat("en-IN", {
@@ -15,6 +19,22 @@ const inr = new Intl.NumberFormat("en-IN", {
 const CARD_ROTATIONS = ["rotate-[-0.5deg]", "rotate-[0.3deg]", "rotate-[-0.7deg]"]
 
 export function TourPackages({ heading = true }: { heading?: boolean }) {
+  const [packages, setPackages] = useState<TourPackage[]>(TOUR_PACKAGES)
+
+  useEffect(() => {
+    let cancelled = false
+    fetchPackages()
+      .then((data) => {
+        if (!cancelled && data.length > 0) setPackages(data)
+      })
+      .catch(() => {
+        // Keep the static fallback when the API is unreachable.
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   return (
     <section id="packages" className="py-16 md:py-20">
       {/* Corkboard background */}
@@ -36,7 +56,7 @@ export function TourPackages({ heading = true }: { heading?: boolean }) {
           ) : null}
 
           <ul className={cn("grid gap-8 sm:grid-cols-2 lg:grid-cols-3", heading ? "mt-10" : "mt-0")}>
-            {TOUR_PACKAGES.map((pkg, i) => (
+            {packages.map((pkg, i) => (
               <li
                 key={pkg.id}
                 className={cn(
