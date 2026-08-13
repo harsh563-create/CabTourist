@@ -24,6 +24,7 @@ import {
   type CabType,
   type TripTypeId,
 } from "@/lib/cabtourist-data"
+import { createBooking } from "@/lib/bookings-api"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -84,6 +85,7 @@ export function BookingWidget({ className }: { className?: string }) {
   const [step, setStep] = React.useState<Step>("results")
   const [selectedCab, setSelectedCab] = React.useState<CabType | null>(null)
   const [submitting, setSubmitting] = React.useState(false)
+  const [submitError, setSubmitError] = React.useState<string | null>(null)
   const [bookingId, setBookingId] = React.useState<string>("")
   const [passenger, setPassenger] = React.useState({
     name: "",
@@ -122,16 +124,35 @@ export function BookingWidget({ className }: { className?: string }) {
     setStep("details")
   }
 
-  function confirmBooking(e: React.FormEvent) {
+  async function confirmBooking(e: React.FormEvent) {
     e.preventDefault()
+    if (!selectedCab) return
     setSubmitting(true)
-    window.setTimeout(() => {
-      setBookingId(
-        "CT" + Math.random().toString(36).slice(2, 8).toUpperCase(),
-      )
-      setSubmitting(false)
+    setSubmitError(null)
+    try {
+      const booking = await createBooking({
+        customer: passenger.name,
+        phone: passenger.phone,
+        email: passenger.email,
+        fromCity: from,
+        toCity: to,
+        tripType,
+        cab: selectedCab.name,
+        date,
+        time: isRoundTrip ? undefined : time,
+        returnDate: isRoundTrip ? returnDate || undefined : undefined,
+        distanceKm,
+        amount: computeFare(selectedCab, distanceKm, isRoundTrip),
+      })
+      setBookingId(booking.ref)
       setStep("confirmed")
-    }, 1100)
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error ? err.message : "Booking failed. Please try again.",
+      )
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const dialogTitle =
@@ -420,6 +441,12 @@ export function BookingWidget({ className }: { className?: string }) {
                   </div>
                 </div>
               </div>
+
+              {submitError ? (
+                <p className="mt-4 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm font-medium text-destructive">
+                  {submitError}
+                </p>
+              ) : null}
 
               <div className="mt-5 flex gap-2">
                 <Button

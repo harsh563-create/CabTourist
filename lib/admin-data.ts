@@ -2,6 +2,7 @@ export type BookingStatus = "confirmed" | "ongoing" | "completed" | "cancelled" 
 
 export type AdminBooking = {
   id: string
+  ref?: string
   customer: string
   route: string
   cab: string
