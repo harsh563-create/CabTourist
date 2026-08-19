@@ -502,6 +502,7 @@ export function AuthForm({ mode, className }: AuthFormProps) {
           {isSignup ? "Sign in" : "Create one"}
         </a>
       </p>
+
     </div>
   )
 }

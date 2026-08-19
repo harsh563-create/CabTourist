@@ -30,9 +30,9 @@ export default function AuthLayout({
       <footer className="px-4 py-4 text-center text-xs text-muted-foreground sm:px-6">
         <p className="font-sans">
           By continuing, you agree to our{" "}
-          <a href="#" className="font-medium text-copper underline hover:text-foreground">Terms of Service</a>
+          <a href="/terms" className="font-medium text-copper underline hover:text-foreground">Terms of Service</a>
           {" "}and{" "}
-          <a href="#" className="font-medium text-copper underline hover:text-foreground">Privacy Policy</a>.
+          <a href="/privacy" className="font-medium text-copper underline hover:text-foreground">Privacy Policy</a>.
         </p>
       </footer>
     </div>
