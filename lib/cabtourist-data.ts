@@ -57,20 +57,14 @@ export type Faq = {
 }
 
 export const CITIES: string[] = [
-  'Mumbai',
-  'Pune',
-  'Delhi',
-  'Jaipur',
-  'Agra',
-  'Goa',
-  'Bengaluru',
-  'Mysuru',
-  'Manali',
-  'Shimla',
-  'Chandigarh',
+  'Ujjain',
+  'Indore',
+  'Omkareshwar',
+  'Nalkheda',
+  'Sanwariya Seth',
+  'Khatushyam',
   'Udaipur',
-  'Kochi',
-  'Munnar',
+  'Panchmari',
 ]
 
 export const CAB_TYPES: CabType[] = [
@@ -137,14 +131,14 @@ export const CAB_TYPES: CabType[] = [
 ]
 
 export const POPULAR_ROUTES: Route[] = [
-  { id: 'r1', from: 'Mumbai', to: 'Pune', distanceKm: 150, durationHrs: 3, fromPrice: 2199, popular: true },
-  { id: 'r2', from: 'Delhi', to: 'Agra', distanceKm: 233, durationHrs: 4, fromPrice: 3299, popular: true },
-  { id: 'r3', from: 'Delhi', to: 'Jaipur', distanceKm: 281, durationHrs: 5, fromPrice: 3899 },
-  { id: 'r4', from: 'Bengaluru', to: 'Mysuru', distanceKm: 145, durationHrs: 3, fromPrice: 2099, popular: true },
-  { id: 'r5', from: 'Chandigarh', to: 'Manali', distanceKm: 310, durationHrs: 8, fromPrice: 5499 },
-  { id: 'r6', from: 'Kochi', to: 'Munnar', distanceKm: 130, durationHrs: 4, fromPrice: 2899 },
-  { id: 'r7', from: 'Delhi', to: 'Shimla', distanceKm: 342, durationHrs: 7, fromPrice: 5199 },
-  { id: 'r8', from: 'Goa', to: 'Udaipur', distanceKm: 550, durationHrs: 10, fromPrice: 8999 },
+  { id: 'r1', from: 'Ujjain', to: 'Omkareshwar', distanceKm: 135, durationHrs: 3, fromPrice: 2599, popular: true },
+  { id: 'r2', from: 'Ujjain', to: 'Indore', distanceKm: 55, durationHrs: 1.5, fromPrice: 1199, popular: true },
+  { id: 'r3', from: 'Ujjain', to: 'Nalkheda', distanceKm: 60, durationHrs: 1.5, fromPrice: 1499 },
+  { id: 'r4', from: 'Ujjain', to: 'Sanwariya Seth', distanceKm: 300, durationHrs: 6, fromPrice: 4999, popular: true },
+  { id: 'r5', from: 'Ujjain', to: 'Khatushyam', distanceKm: 450, durationHrs: 8, fromPrice: 7999 },
+  { id: 'r6', from: 'Indore', to: 'Ujjain', distanceKm: 55, durationHrs: 1.5, fromPrice: 1199 },
+  { id: 'r7', from: 'Ujjain', to: 'Udaipur', distanceKm: 400, durationHrs: 7, fromPrice: 6999 },
+  { id: 'r8', from: 'Ujjain', to: 'Panchmari', distanceKm: 200, durationHrs: 4.5, fromPrice: 3499 },
 ]
 
 export const TOUR_PACKAGES: TourPackage[] = [

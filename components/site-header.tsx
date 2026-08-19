@@ -88,13 +88,6 @@ export function SiteHeader() {
               <Phone className="size-3.5" />
               {CONTACTS.phone1Display}
             </a>
-            <a
-              href={CONTACTS.phone2Href}
-              className="hidden items-center gap-1.5 transition-opacity hover:opacity-80 sm:inline-flex"
-            >
-              <Phone className="size-3.5" />
-              {CONTACTS.phone2Display}
-            </a>
           </div>
         </div>
       </div>

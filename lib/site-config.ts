@@ -9,12 +9,10 @@ export const SITE = {
 } as const
 
 export const CONTACTS = {
-  whatsappNumber: "919876543210",
-  whatsappDisplay: "+91 98765 43210",
+  whatsappNumber: "917828887888",
+  whatsappDisplay: "+91 7828887888",
   whatsappLink: (text: string) =>
-    `https://wa.me/919876543210?text=${encodeURIComponent(text)}`,
-  phone1Display: "1800-000-000",
-  phone1Href: "tel:+911800000000",
-  phone2Display: "+91 98275 45678",
-  phone2Href: "tel:+919827545678",
+    `https://wa.me/917828887888?text=${encodeURIComponent(text)}`,
+  phone1Display: "+91 7828887888",
+  phone1Href: "tel:+917828887888",
 } as const

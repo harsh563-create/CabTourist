@@ -8,27 +8,27 @@ import { cn } from "@/lib/utils"
 
 const DESTINATIONS = [
   {
-    name: "Leh Ladakh",
-    tagline: "Roof of the world",
-    image: "/images/package-mountain.png",
+    name: "Ujjain",
+    tagline: "Spiritual heart of India",
+    image: "/images/hero-mahakal-1.jpg",
     rotation: -2,
   },
   {
-    name: "Rajasthan",
-    tagline: "Royal heritage",
+    name: "Indore",
+    tagline: "Food capital of India",
     image: "/images/package-heritage.png",
     rotation: 1.5,
   },
   {
-    name: "Kerala",
-    tagline: "God's own country",
-    image: "/images/package-beach.png",
+    name: "Omkareshwar",
+    tagline: "Sacred island on the Narmada",
+    image: "/images/package-mountain.png",
     rotation: -1,
   },
   {
-    name: "Goa",
-    tagline: "Sun, sand & soul",
-    image: "/images/package-beach.png",
+    name: "Maheshwar",
+    tagline: "Fortress on the Narmada",
+    image: "/images/pujan-mahakal.jpg",
     rotation: 2,
   },
 ]

@@ -59,10 +59,6 @@ export function SiteFooter() {
                 <a href={CONTACTS.phone1Href} className="transition-colors hover:text-copper">
                   {CONTACTS.phone1Display}
                 </a>
-                <span aria-hidden="true">·</span>
-                <a href={CONTACTS.phone2Href} className="transition-colors hover:text-copper">
-                  {CONTACTS.phone2Display}
-                </a>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="size-4 text-copper" />

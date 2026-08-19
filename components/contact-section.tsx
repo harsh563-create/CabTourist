@@ -12,15 +12,15 @@ const CONTACTS = [
   {
     icon: Phone,
     label: "Call us",
-    value: "+91 1800-000-000",
-    href: "tel:+911800000000",
+    value: "+91 7828887888",
+    href: "tel:+917828887888",
     sub: "Mon – Sun, 8 AM – 10 PM",
   },
   {
     icon: MessageCircle,
     label: "WhatsApp",
-    value: "+91 98765 43210",
-    href: "https://wa.me/919876543210?text=Hi%20CabTourist%2C%20I%20need%20help",
+    value: "+91 7828887888",
+    href: "https://wa.me/917828887888?text=Hi%20CabTourist%2C%20I%20need%20help",
     sub: "Quick replies, always available",
   },
   {
@@ -33,8 +33,8 @@ const CONTACTS = [
   {
     icon: MapPin,
     label: "Office",
-    value: "Bengaluru, Karnataka",
-    href: "https://maps.google.com/?q=Bengaluru+Karnataka",
+    value: "Ujjain, Madhya Pradesh",
+    href: "https://maps.google.com/?q=Ujjain+Madhya+Pradesh",
     sub: "India",
   },
 ]
