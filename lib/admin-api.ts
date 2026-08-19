@@ -39,6 +39,29 @@ export type RecycleBinItem = {
   createdAt: string
 }
 
+export type ContactMessage = {
+  id: string
+  name: string
+  email: string
+  phone: string
+  subject: string
+  message: string
+  read: boolean
+  createdAt?: string
+}
+
+export async function fetchContactMessages(): Promise<ContactMessage[]> {
+  return adminFetch<{ messages: ContactMessage[] }>("/api/admin/contact-messages").then((d) => d.messages)
+}
+
+export async function markMessageRead(id: string): Promise<ContactMessage> {
+  return adminFetch<{ message: ContactMessage }>(`/api/admin/contact-messages/${id}/read`, { method: "PUT" }).then((d) => d.message)
+}
+
+export async function deleteContactMessage(id: string): Promise<void> {
+  await adminFetch(`/api/admin/contact-messages/${id}`, { method: "DELETE" })
+}
+
 export async function fetchDeletedItems(collection?: string): Promise<RecycleBinItem[]> {
   const qs = collection ? `?collection=${collection}` : ""
   return adminFetch<{ items: RecycleBinItem[] }>(`/api/admin/recycle-bin${qs}`).then((d) => d.items)

@@ -115,6 +115,7 @@ export const ADMIN_NAV = [
   { href: "/admin/customers", label: "Customers", icon: "users" },
   { href: "/admin/packages", label: "Packages", icon: "map" },
   { href: "/admin/recycle-bin", label: "Recycle Bin", icon: "trash-2" },
+  { href: "/admin/contact-messages", label: "Contact Messages", icon: "mail" },
 ] as const
 
 export function inr(n: number): string {

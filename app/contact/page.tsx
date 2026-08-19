@@ -18,6 +18,7 @@ import { Label } from "@/components/ui/label"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { FloatingActions } from "@/components/floating-actions"
+import { submitContactMessage } from "@/lib/contact-api"
 
 const CONTACT_INFO = [
   {
@@ -62,9 +63,14 @@ export default function ContactPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
-    await new Promise((r) => setTimeout(r, 1200))
-    setLoading(false)
-    setSent(true)
+    try {
+      await submitContactMessage({ name, email, phone: phone || undefined, subject, message })
+      setSent(true)
+    } catch {
+      alert("Failed to send message. Please try again.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
