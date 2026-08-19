@@ -30,6 +30,58 @@ export type AdminCustomer = {
   joinedAt: string | null
 }
 
+export type RecycleBinItem = {
+  _id: string
+  sourceCollection: string
+  itemId: string
+  data: Record<string, unknown>
+  deletedAt: string
+  createdAt: string
+}
+
+export async function fetchDeletedItems(collection?: string): Promise<RecycleBinItem[]> {
+  const qs = collection ? `?collection=${collection}` : ""
+  return adminFetch<{ items: RecycleBinItem[] }>(`/api/admin/recycle-bin${qs}`).then((d) => d.items)
+}
+
+export async function restoreDeletedItem(id: string): Promise<{ id: string; collection: string }> {
+  return adminFetch(`/api/admin/recycle-bin/${id}/restore`, { method: "POST" })
+}
+
+export async function permanentDeleteItem(id: string): Promise<void> {
+  await adminFetch(`/api/admin/recycle-bin/${id}`, { method: "DELETE" })
+}
+
+export async function emptyRecycleBin(collection?: string): Promise<void> {
+  const qs = collection ? `?collection=${collection}` : ""
+  await adminFetch(`/api/admin/recycle-bin${qs}`, { method: "DELETE" })
+}
+
+export async function uploadImage(file: File): Promise<string> {
+  const token = getAdminToken()
+  if (!token) throw new Error("Admin session not found")
+
+  const formData = new FormData()
+  formData.append("file", file)
+
+  const res = await fetch(`${API_BASE_URL}/api/admin/upload`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  })
+
+  const data = (await res.json().catch(() => null)) as { success: boolean; data?: { url: string }; message?: string } | null
+
+  if (!res.ok) {
+    const message = data && typeof data.message === "string" ? data.message : "Upload failed"
+    throw new Error(message)
+  }
+
+  return data?.data?.url ?? ""
+}
+
 type ApiResponse<T> = { success: boolean; message?: string; data?: T }
 
 export function locationLabel(location?: AdminLocation): string {

@@ -9,6 +9,8 @@ import {
   Users,
   Map,
   Compass,
+  Car,
+  Trash2,
   type LucideIcon,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -20,6 +22,8 @@ const ICONS: Record<string, LucideIcon> = {
   "building-2": Building2,
   users: Users,
   map: Map,
+  car: Car,
+  "trash-2": Trash2,
 }
 
 export function AdminSidebar({ onNavigate }: { onNavigate?: () => void }) {

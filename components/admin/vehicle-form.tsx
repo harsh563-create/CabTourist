@@ -9,30 +9,28 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
 import { uploadImage } from "@/lib/admin-api"
-import type { TourPackage } from "@/lib/cabtourist-data"
+import type { Vehicle } from "@/lib/vehicles-api"
 
-const TAG_OPTIONS = ["", "Bestseller", "Heritage", "Weekend"]
-
-export function PackageForm({
+export function VehicleForm({
   initial,
   onSave,
   onCancel,
 }: {
-  initial: TourPackage | null
-  onSave: (data: Omit<TourPackage, "id"> & { id?: string }) => void
+  initial: Vehicle | null
+  onSave: (data: Omit<Vehicle, "id"> & { id?: string }) => void
   onCancel: () => void
 }) {
   const [form, setForm] = useState({
-    title: initial?.title ?? "",
-    location: initial?.location ?? "",
-    image: initial?.image ?? "/placeholder.svg",
-    days: initial?.days ?? 3,
-    nights: initial?.nights ?? 2,
-    rating: initial?.rating ?? 4.5,
-    reviews: initial?.reviews ?? 0,
-    fromPrice: initial?.fromPrice ?? 9999,
-    tag: initial?.tag ?? "",
-    highlights: initial?.highlights.join(", ") ?? "",
+    name: initial?.name ?? "",
+    description: initial?.description ?? "",
+    image: initial?.image ?? "/images/car-sedan.jpg",
+    seats: initial?.seats ?? 4,
+    bags: initial?.bags ?? 2,
+    perKm: initial?.perKm ?? 14,
+    baseFare: initial?.baseFare ?? 350,
+    eta: initial?.eta ?? "5 min",
+    ac: initial?.ac ?? true,
+    active: initial?.active ?? true,
   })
 
   const [imageMode, setImageMode] = useState<"link" | "upload">("link")
@@ -64,21 +62,17 @@ export function PackageForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const highlights = form.highlights
-      .split(",")
-      .map((h) => h.trim())
-      .filter(Boolean)
     onSave({
-      title: form.title,
-      location: form.location,
+      name: form.name,
+      description: form.description,
       image: form.image || "/placeholder.svg",
-      days: form.days,
-      nights: form.nights,
-      rating: form.rating,
-      reviews: form.reviews,
-      fromPrice: form.fromPrice,
-      tag: form.tag || undefined,
-      highlights,
+      seats: form.seats,
+      bags: form.bags,
+      perKm: form.perKm,
+      baseFare: form.baseFare,
+      eta: form.eta,
+      ac: form.ac,
+      active: form.active,
       id: initial?.id,
     })
   }
@@ -86,30 +80,29 @@ export function PackageForm({
   return (
     <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2">
       <div className="flex flex-col gap-1.5 sm:col-span-2">
-        <Label htmlFor="package-title">Package title</Label>
+        <Label htmlFor="vehicle-name">Vehicle name</Label>
         <Input
-          id="package-title"
+          id="vehicle-name"
           required
-          value={form.title}
-          onChange={(e) => set("title", e.target.value)}
-          placeholder="Himalayan Escape"
+          value={form.name}
+          onChange={(e) => set("name", e.target.value)}
+          placeholder="Sedan"
         />
       </div>
 
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="package-location">Location</Label>
+      <div className="flex flex-col gap-1.5 sm:col-span-2">
+        <Label htmlFor="vehicle-description">Description</Label>
         <Input
-          id="package-location"
-          required
-          value={form.location}
-          onChange={(e) => set("location", e.target.value)}
-          placeholder="Manali & Shimla"
+          id="vehicle-description"
+          value={form.description}
+          onChange={(e) => set("description", e.target.value)}
+          placeholder="Comfortable rides for small families"
         />
       </div>
 
       {/* Image field with toggle */}
-      <div className="flex flex-col gap-1.5">
-        <Label>Package Image</Label>
+      <div className="flex flex-col gap-1.5 sm:col-span-2">
+        <Label>Vehicle Image</Label>
 
         {/* Toggle buttons */}
         <div className="flex gap-1 rounded-md border border-border p-0.5">
@@ -144,10 +137,10 @@ export function PackageForm({
         {/* Link input */}
         {imageMode === "link" ? (
           <Input
-            id="package-image"
+            id="vehicle-image"
             value={form.image}
             onChange={(e) => set("image", e.target.value)}
-            placeholder="https://example.com/photo.jpg or /images/..."
+            placeholder="/images/car-sedan.jpg or https://..."
           />
         ) : (
           <div className="flex flex-col gap-2">
@@ -158,7 +151,7 @@ export function PackageForm({
                 accept="image/jpeg,image/png,image/gif,image/webp,image/svg+xml"
                 onChange={handleFileUpload}
                 className="hidden"
-                id="package-file-upload"
+                id="vehicle-file-upload"
               />
               <Button
                 type="button"
@@ -200,104 +193,98 @@ export function PackageForm({
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="package-days">Days</Label>
-          <Input
-            id="package-days"
-            required
-            type="number"
-            min={1}
-            value={form.days}
-            onChange={(e) => set("days", num(e.target.value))}
-          />
-        </div>
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="package-nights">Nights</Label>
-          <Input
-            id="package-nights"
-            required
-            type="number"
-            min={0}
-            value={form.nights}
-            onChange={(e) => set("nights", num(e.target.value))}
-          />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="package-rating">Rating (0–5)</Label>
-          <Input
-            id="package-rating"
-            required
-            type="number"
-            min={0}
-            max={5}
-            step={0.1}
-            value={form.rating}
-            onChange={(e) => set("rating", Number(e.target.value))}
-          />
-        </div>
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="package-reviews">Reviews</Label>
-          <Input
-            id="package-reviews"
-            required
-            type="number"
-            min={0}
-            value={form.reviews}
-            onChange={(e) => set("reviews", num(e.target.value))}
-          />
-        </div>
-      </div>
-
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="package-price">From price (₹)</Label>
+        <Label htmlFor="vehicle-eta">ETA</Label>
         <Input
-          id="package-price"
-          required
-          type="number"
-          min={0}
-          value={form.fromPrice}
-          onChange={(e) => set("fromPrice", num(e.target.value))}
+          id="vehicle-eta"
+          value={form.eta}
+          onChange={(e) => set("eta", e.target.value)}
+          placeholder="5 min"
         />
       </div>
 
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="vehicle-seats">Seats</Label>
+          <Input
+            id="vehicle-seats"
+            required
+            type="number"
+            min={1}
+            max={20}
+            value={form.seats}
+            onChange={(e) => set("seats", num(e.target.value))}
+          />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="vehicle-bags">Bags</Label>
+          <Input
+            id="vehicle-bags"
+            required
+            type="number"
+            min={0}
+            max={20}
+            value={form.bags}
+            onChange={(e) => set("bags", num(e.target.value))}
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="vehicle-perKm">Per km (₹)</Label>
+          <Input
+            id="vehicle-perKm"
+            required
+            type="number"
+            min={0}
+            value={form.perKm}
+            onChange={(e) => set("perKm", num(e.target.value))}
+          />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="vehicle-baseFare">Base fare (₹)</Label>
+          <Input
+            id="vehicle-baseFare"
+            required
+            type="number"
+            min={0}
+            value={form.baseFare}
+            onChange={(e) => set("baseFare", num(e.target.value))}
+          />
+        </div>
+      </div>
+
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="package-tag">Tag</Label>
+        <Label htmlFor="vehicle-ac">Air Conditioned</Label>
         <select
-          id="package-tag"
-          value={form.tag}
-          onChange={(e) => set("tag", e.target.value)}
+          id="vehicle-ac"
+          value={form.ac ? "true" : "false"}
+          onChange={(e) => set("ac", e.target.value === "true")}
           className={cn(
             "h-9 rounded-md border border-input bg-transparent px-3 font-sans text-sm outline-none transition-colors",
             "focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
           )}
         >
-          {TAG_OPTIONS.map((t) => (
-            <option key={t} value={t}>
-              {t === "" ? "None" : t}
-            </option>
-          ))}
+          <option value="true">Yes</option>
+          <option value="false">No</option>
         </select>
       </div>
 
-      <div className="flex flex-col gap-1.5 sm:col-span-2">
-        <Label htmlFor="package-highlights">Highlights (comma separated)</Label>
-        <textarea
-          id="package-highlights"
-          rows={3}
-          value={form.highlights}
-          onChange={(e) => set("highlights", e.target.value)}
-          placeholder="Snow point sightseeing, Private cab throughout, Handpicked stays"
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="vehicle-active">Status</Label>
+        <select
+          id="vehicle-active"
+          value={form.active ? "true" : "false"}
+          onChange={(e) => set("active", e.target.value === "true")}
           className={cn(
-            "rounded-md border border-input bg-transparent px-3 py-2.5 font-sans text-sm",
-            "placeholder:text-muted-foreground",
-            "focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50",
-            "outline-none transition-colors"
+            "h-9 rounded-md border border-input bg-transparent px-3 font-sans text-sm outline-none transition-colors",
+            "focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
           )}
-        />
+        >
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
+        </select>
       </div>
 
       <div className="mt-2 flex justify-end gap-2 sm:col-span-2">
@@ -309,7 +296,7 @@ export function PackageForm({
           disabled={uploading}
           className="bg-leather font-semibold text-primary-foreground hover:bg-leather/90"
         >
-          {initial ? "Save changes" : "Add package"}
+          {initial ? "Save changes" : "Add vehicle"}
         </Button>
       </div>
     </form>

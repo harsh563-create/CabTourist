@@ -111,8 +111,10 @@ export const ADMIN_NAV = [
   { href: "/admin", label: "Dashboard", icon: "layout-dashboard" },
   { href: "/admin/bookings", label: "Bookings", icon: "calendar-check" },
   { href: "/admin/vendors", label: "Vendors", icon: "building-2" },
+  { href: "/admin/vehicles", label: "Vehicles", icon: "car" },
   { href: "/admin/customers", label: "Customers", icon: "users" },
   { href: "/admin/packages", label: "Packages", icon: "map" },
+  { href: "/admin/recycle-bin", label: "Recycle Bin", icon: "trash-2" },
 ] as const
 
 export function inr(n: number): string {

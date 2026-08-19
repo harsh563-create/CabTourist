@@ -22,6 +22,7 @@ export function TourPackages({ heading = true }: { heading?: boolean }) {
   const [packages, setPackages] = useState<TourPackage[]>(TOUR_PACKAGES)
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV === "true") return
     let cancelled = false
     fetchPackages()
       .then((data) => {

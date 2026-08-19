@@ -1,10 +1,42 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, Armchair, Snowflake } from "lucide-react"
 
 import { CAB_TYPES } from "@/lib/cabtourist-data"
+import { fetchVehicles, type Vehicle } from "@/lib/vehicles-api"
 
 export function CabAvailable({ heading = true }: { heading?: boolean }) {
+  const [vehicles, setVehicles] = useState<Vehicle[]>([])
+
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DEV === "true") return
+    fetchVehicles()
+      .then((data) => {
+        if (data.length > 0) setVehicles(data)
+      })
+      .catch(() => {
+        // fallback to static data
+      })
+  }, [])
+
+  const displayVehicles = vehicles.length > 0
+    ? vehicles.map((v) => ({
+        id: v.id,
+        name: v.name,
+        description: v.description,
+        seats: v.seats,
+        bags: v.bags,
+        perKm: v.perKm,
+        baseFare: v.baseFare,
+        eta: v.eta,
+        ac: v.ac,
+        image: v.image,
+      }))
+    : CAB_TYPES
+
   return (
     <section id="our-car" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-20">
       {heading ? (
@@ -37,7 +69,7 @@ export function CabAvailable({ heading = true }: { heading?: boolean }) {
             : "grid gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5"
         }
       >
-        {CAB_TYPES.map((cab) => (
+        {displayVehicles.map((cab) => (
           <li
             key={cab.id}
             className="group flex flex-col overflow-hidden rounded-2xl border border-border/70 bg-card shadow-[0_2px_10px_rgba(58,46,31,0.08)] transition-all hover:-translate-y-1 hover:shadow-[0_10px_28px_rgba(58,46,31,0.14)]"
